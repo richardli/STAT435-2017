@@ -1,0 +1,295 @@
+\documentclass[usenames,dvipsnames,10pt,compress, final, handout]{beamer}\usepackage[]{graphicx}\usepackage[]{color}
+%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+\let\hlipl\hlkwb
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
+\usepackage[]{graphicx}\usepackage[]{color}
+ \usepackage{alltt} 
+\let\Tiny=\tiny
+\usepackage{eqnarray,amsmath}
+% \usepackage{wasysym}
+\usepackage{mathtools}
+\usepackage{multirow}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{multirow}
+% \usepackage{bigstrut}
+\usepackage{graphicx}
+\usepackage[round]{natbib}
+\usepackage{bm}
+\usepackage{tikzsymbols}
+
+\setbeamertemplate{navigation symbols}{}    
+\setbeamertemplate{footline}[frame number]{}
+\usepackage{soul}
+\usetheme{Singapore}
+
+%Misc Commands
+\newcommand{\mbf}{\mathbf}
+\newcommand{\lexp}{$\overset{\mbox{\tiny 0}}{e}$}
+\newenvironment{wideitemize}{\itemize\addtolength{\itemsep}{5pt}}{\enditemize}
+
+
+\newcommand{\bx}{{\bm x}}
+\newcommand{\bX}{{\bm X}}
+\newcommand{\by}{{\bm y}}
+\newcommand{\bY}{{\bm Y}}
+\newcommand{\bW}{{\bm W}}
+\newcommand{\bG}{{\bm G}}
+\newcommand{\bR}{{\bm R}}
+\newcommand{\bZ}{{\bm Z}}
+\newcommand{\bV}{{\bm V}}
+\newcommand{\bL}{{\bm L}}
+\newcommand{\bz}{{\bm z}}
+\newcommand{\be}{{\bm e}}
+\newcommand{\bgamma}{{\bm \gamma}}
+\newcommand{\bbeta}{{\bm \beta}}
+\newcommand{\balpha}{{\bm \alpha}}
+\newcommand{\bSigma}{{\bm \Sigma}}
+\newcommand{\bmu}{{\bm \mu}}
+\newcommand{\btheta}{{\bm \theta}}
+\newcommand{\bepsilon}{{\bm \epsilon}}
+\newcommand{\bone}{{\bm 1}}
+\newcommand{\bzero}{{\bm 0}}
+\newcommand{\bC}{{\bm C}}
+\newcommand{\bI}{{\bm I}}
+\newcommand{\bA}{{\bm A}}
+\newcommand{\bB}{{\bm B}}
+\newcommand{\bQ}{{\bm Q}}
+\newcommand{\bS}{{\bm S}}
+\newcommand{\bD}{{\bm D}}
+\newcommand{\cQ}{\mathcal{Q}}
+\newcommand{\cU}{\mathcal{U}}
+\newcommand{\cI}{\mathcal{I}}
+\newcommand{\cL}{\mathcal{L}}
+\newcommand{\orange}{\textcolor{Orange}}
+\newcommand{\green}{\textcolor{green}}
+\newcommand{\blue}{\textcolor{blue}}
+\newcommand{\red}{\textcolor{red}}
+\newcommand{\purple}{\textcolor{purple}}
+\newcommand{\gray}{\textcolor{gray}}
+\newcommand{\ok}{\nonumber}
+
+% Adjust vertical spacing in lists
+\makeatletter
+\def\@listi{\leftmargin\leftmargini
+            \topsep 		8\p@ \@plus2\p@ \@minus2.5\p@
+            \parsep 		0\p@
+            \itemsep	5\p@ \@plus2\p@ \@minus3\p@}
+\let\@listI\@listi
+\def\@listii{\leftmargin\leftmarginii
+              \topsep    6\p@ \@plus1\p@ \@minus2\p@
+              \parsep    0\p@ \@plus\p@
+              \itemsep  3\p@ \@plus2\p@ \@minus3\p@}
+\def\@listiii{\leftmargin\leftmarginiii
+              \topsep    3\p@ \@plus1\p@ \@minus2\p@
+              \parsep    0\p@ \@plus\p@
+              \itemsep  2\p@ \@plus2\p@ \@minus3\p@}
+\makeatother
+% Dealing with fraile envrionment of beamer with codes
+\newenvironment{xframe}[2][]
+  {\begin{frame}[fragile,environment=xframe,#1]
+  \frametitle{#2}}
+  {\end{frame}}
+
+
+% trick to make all itemize pause
+% \usepackage{letltxmacro}
+% \LetLtxMacro\olditemize\itemize
+
+
+
+\title{Stat 435 Intro to Statistical Machine Learning}
+\subtitle{Week 6: Additional exercises}
+
+\author[]{Richard Li}
+\date{\today}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+% \renewcommand{\itemize}[1][<+(1)->]{\olditemize[#1]}
+
+\maketitle
+
+\frame{
+\frametitle{Curse of dimensionality}
+
+Suppose that we have a set of observations, each with measurements on $p=1$ feature, $X$. We assume that $X$ is uniformly (evenly) distributed on $[0,1]$. Associated with each observation is a response value. 
+
+Suppose that we wish to predict a test observation’s response using only observations that are within 10\% of the range of $X$ closest to that test observation. 
+
+For instance, in order to predict the response for a test observation with $X=0.6$, we will use observations in the range $[0.55,0.65]$. On average, what fraction of the available observations will we use to make the prediction ?
+\vspace{2cm}
+
+}
+
+\frame{
+\frametitle{Curse of dimensionality}
+
+Now suppose that we have a set of observations, each with measurements on $p = 2$ features, $X_1$ and $X_2$. We assume that $(X_1, X_2)$ are uniformly distributed on $[0, 1] \times [0, 1]$. We wish to predict a test observation’s response using only observations that are within 10\% of the range of $X_1$ and within 10\% of the range of $X_2$ closest to that test observation. On average, what fraction of the available observations will we use to make the prediction ?
+\vspace{3cm}
+
+}
+\frame{
+\frametitle{Curse of dimensionality}
+What if $p = 100$?
+\vspace{5cm}
+
+}
+\frame{
+\frametitle{Curse of dimensionality}
+
+}
+%================================================================%
+\section{Resampling methods}
+\stepcounter{subsection}
+\frame{
+  \frametitle{Comparing resampling methods}
+  Consider a very simple model,
+\[Y = \beta + \epsilon\]
+where $Y$ is a scalar response variable, $\beta$ is an unknown parameter, and $\epsilon$ is a noise term with $E(\epsilon) = 0$, $Var(\epsilon) = \sigma^2$. Assume that we have $n$ observations with uncorrelated errors. Show that
+\begin{enumerate}
+  \item Validation set approach over-estimate the expected test error.
+  \item LOOCV does not substantially over-estimate the expected test error, provided that $n$ is large.
+  \item K-fold CV provides an over-estimate of the expected test error that is somewhere between the other two approaches
+\end{enumerate}
+  
+}
+
+\frame{
+  \frametitle{Comparing resampling methods}
+  }
+
+\frame{
+  \frametitle{Comparing resampling methods}
+  }
+ 
+\frame{
+  \frametitle{Comparing resampling methods}
+  }
+\frame{
+  \frametitle{Comparing resampling methods}
+  Additional question: How about variance of test error?
+  }
+
+%================================================================%
+\section{Ridge regression}
+\stepcounter{subsection}
+\frame{
+  \frametitle{Shortest review of linear algebra}
+  If you google matrix calculus, this is the picture google shows me:
+
+  \begin{centering}
+  \includegraphics[width=.6\textwidth]{figure/matrix_diff.png}
+  \end{centering}
+
+  \textit{(really this is basically all you need to know...)}
+ }
+ \frame{
+  \frametitle{Projection matrix}
+  The OLS coefficient of the linear regression is
+  
+  \vspace{1cm}
+  The fitted values are
+  
+  \vspace{1cm}
+  Something interesting about the linear algebra here:
+  \vspace{3cm}
+
+}
+
+\frame{
+\frametitle{Projection matrix}
+}
+
+\frame{
+  \frametitle{Ridge regression}
+  Show that the hat matrix associated with ridge regression is not a projection matrix.
+  \vspace{5cm}
+}
+\frame{
+  \frametitle{Ridge regression}
+   
+}
+
+
+%================================================================%
+\section{Regression with correlated predictors}
+\stepcounter{subsection}
+\frame{
+  \frametitle{Regression with correlated predictors}
+
+  It is well-known that ridge regression tends to give similar coefficient values to correlated variables, whereas the lasso may give quite different coefficient values to correlated variables. We will now explore this property in a very simple setting.
+  
+  \vspace{.5cm}
+  Suppose $n = p = 2$, $x_{11} = x_{12}$, $x_{21} = x_{22}$, and both predictors and the response are centered to $0$, so we do not have to estimate the intercept.
+  
+  \vspace{1.5cm}
+  (a) Write out the ridge regression optimization problem in this setting.
+
+  }
+
+\frame{
+  \frametitle{Regression with correlated predictors}
+    Argue that in this setting, the ridge coefficient estimates satisfy $\hat\beta_1 = \hat\beta_2$
+   \vspace{4cm}
+   
+ 
+  }
+\frame{
+\frametitle{Regression with correlated predictors}
+
+}
+\frame{
+  \frametitle{Regression with correlated predictors}
+    Argue that in this setting, the lasso coefficient estimates are not unique
+   \vspace{5cm}
+  }   
+\end{document}

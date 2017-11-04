@@ -1,0 +1,537 @@
+\documentclass[usenames,dvipsnames,10pt,compress]{beamer} 
+\let\Tiny=\tiny
+\usepackage{eqnarray,amsmath}
+% \usepackage{wasysym}
+\usepackage{mathtools}
+\usepackage{multirow}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{multirow}
+% \usepackage{bigstrut}
+\usepackage{graphicx}
+\usepackage[round]{natbib}
+\usepackage{bm}
+
+\setbeamertemplate{navigation symbols}{}    
+\setbeamertemplate{footline}[frame number]{}
+\usepackage{soul}
+\usetheme{Singapore}
+
+%Misc Commands
+\newcommand{\mbf}{\mathbf}
+\newcommand{\lexp}{$\overset{\mbox{\tiny 0}}{e}$}
+\newenvironment{wideitemize}{\itemize\addtolength{\itemsep}{5pt}}{\enditemize}
+
+
+\newcommand{\bx}{{\bm x}}
+\newcommand{\bX}{{\bm X}}
+\newcommand{\by}{{\bm y}}
+\newcommand{\bY}{{\bm Y}}
+\newcommand{\bW}{{\bm W}}
+\newcommand{\bG}{{\bm G}}
+\newcommand{\bR}{{\bm R}}
+\newcommand{\bZ}{{\bm Z}}
+\newcommand{\bV}{{\bm V}}
+\newcommand{\bL}{{\bm L}}
+\newcommand{\bz}{{\bm z}}
+\newcommand{\be}{{\bm e}}
+\newcommand{\bgamma}{{\bm \gamma}}
+\newcommand{\bbeta}{{\bm \beta}}
+\newcommand{\balpha}{{\bm \alpha}}
+\newcommand{\bSigma}{{\bm \Sigma}}
+\newcommand{\bmu}{{\bm \mu}}
+\newcommand{\btheta}{{\bm \theta}}
+\newcommand{\bepsilon}{{\bm \epsilon}}
+\newcommand{\bone}{{\bm 1}}
+\newcommand{\bzero}{{\bm 0}}
+\newcommand{\bC}{{\bm C}}
+\newcommand{\bI}{{\bm I}}
+\newcommand{\bA}{{\bm A}}
+\newcommand{\bB}{{\bm B}}
+\newcommand{\bQ}{{\bm Q}}
+\newcommand{\bS}{{\bm S}}
+\newcommand{\bD}{{\bm D}}
+\newcommand{\cQ}{\mathcal{Q}}
+\newcommand{\cU}{\mathcal{U}}
+\newcommand{\cI}{\mathcal{I}}
+\newcommand{\cL}{\mathcal{L}}
+\newcommand{\orange}{\textcolor{Orange}}
+\newcommand{\green}{\textcolor{green}}
+\newcommand{\blue}{\textcolor{blue}}
+\newcommand{\red}{\textcolor{red}}
+\newcommand{\purple}{\textcolor{purple}}
+\newcommand{\gray}{\textcolor{gray}}
+\newcommand{\ok}{\nonumber}
+
+% Adjust vertical spacing in lists
+\makeatletter
+\def\@listi{\leftmargin\leftmargini
+            \topsep 		8\p@ \@plus2\p@ \@minus2.5\p@
+            \parsep 		0\p@
+            \itemsep	5\p@ \@plus2\p@ \@minus3\p@}
+\let\@listI\@listi
+\def\@listii{\leftmargin\leftmarginii
+              \topsep    6\p@ \@plus1\p@ \@minus2\p@
+              \parsep    0\p@ \@plus\p@
+              \itemsep  3\p@ \@plus2\p@ \@minus3\p@}
+\def\@listiii{\leftmargin\leftmarginiii
+              \topsep    3\p@ \@plus1\p@ \@minus2\p@
+              \parsep    0\p@ \@plus\p@
+              \itemsep  2\p@ \@plus2\p@ \@minus3\p@}
+\makeatother
+% Dealing with fraile envrionment of beamer with codes
+\newenvironment{xframe}[2][]
+  {\begin{frame}[fragile,environment=xframe,#1]
+  \frametitle{#2}}
+  {\end{frame}}
+
+<<setup, include=FALSE, cache=FALSE>>=
+library(knitr)
+library(formatR)
+# set global chunk options
+opts_chunk$set(fig.path='figure/', fig.align='center', fig.show='hold')
+opts_chunk$set(warning=FALSE, message=FALSE, error=FALSE) 
+options(replace.assign=TRUE,width=90)
+opts_chunk$set(tidy=FALSE)
+opts_chunk$set(cache=TRUE)
+read_chunk('codes/week2.R')
+@
+
+
+\title{Stat 435 Intro to Statistical Machine Learning}
+\subtitle{Week 2: Linear Regression}
+
+\author[]{Richard Li}
+\date{\today}
+
+
+\begin{document}
+\maketitle
+%================================================================%
+\section{Regression review}
+\stepcounter{subsection}
+\frame{
+  \frametitle{Plan for today}
+  \begin{itemize}[<+->]
+    \item A review of multiple linear regression (Sec 3.2)
+          \begin{itemize}[<+->]
+            \item Parameter estimation
+            \item Prediction
+          \end{itemize}
+    \item Complications/Problems in regression (Sec 3.3)
+  \end{itemize}
+}
+
+\frame{
+\frametitle{Linear Regression: an overview}
+ \[
+      \by = \beta_0 + \beta_1\bx_1 + ... + \beta_p \bx_p + \bepsilon
+    \]
+
+\begin{itemize}[<+->]   
+  \item Or in matrix form:
+     \[
+      \by = \bX\bbeta + \bepsilon
+    \]
+  \vspace{.5cm}
+  \item Notice about the intercept...
+  \item What are the dimensions of the bold letters?
+\end{itemize}
+}
+\frame{
+\frametitle{Linear Regression: an overview}
+\begin{enumerate}
+  \item Is there a relationship between response $Y$ and predictors $X_1, .., X_p$.
+  \item How accurately can we estimate the effects of $X$ on $Y$?
+  \item Which predictors predict/explain $Y$?
+  \item How accurate can we predict (future) $Y$?
+  \item Other considerations?
+ \end{enumerate}
+}
+
+%================================================================%
+\section{Multiple linear regression}
+\stepcounter{subsection}
+
+
+\frame{
+  \frametitle{Estimating the Regression Coefficients: Reviews}
+  \begin{itemize}[<+->]
+    \item Estimate $\hat \beta_0, ..., \hat \beta_p$
+        \begin{itemize}[<+->]
+          \item If we write the intercept as the first column of $\bX$, $\hat\beta = (\bX^T\bX)^{-1}\bX^T\by$
+          \item Derived from minimizing sum of squared residuals.
+        \end{itemize}
+    \item What is sum of squared residuals? 
+        \begin{itemize}[<+->]
+          \item $RSS = \sum_i^n(y_i - \hat y_i)^2)$
+        \end{itemize}
+    \item What is total sum of squares?
+        \begin{itemize}[<+->]
+              \item  $TSS = \sum_i^n(y_i - \bar y)^2$ 
+        \end{itemize}      
+  \end{itemize}
+}
+
+\frame{
+\frametitle{Hypothesis testing of model utility}
+\begin{enumerate}
+  \item \blue{Is there a relationship between response $Y$ and any predictors $X_1, .., X_p$.}
+  \item How accurately can we estimate the effects of $X$ on $Y$?
+  \item Which predictors predict/explain $Y$?
+  \item How accurate can we predict (future) $Y$?
+  \item Other considerations?
+
+\end{enumerate}
+}
+
+\frame{
+  \frametitle{Hypothesis testing of model utility}
+  \begin{itemize}[<+->]
+    \item Null hypothesis
+        \[
+        H_0: \mbox{There is no relationship between any $X$ and $Y$, or} 
+        \]  
+        \[
+        H_0: \beta_0  = \beta_1 = ... = \beta_p = 0. 
+        \]
+    \item Alternative hypothesis
+        \[
+        H_1: \mbox{There is some relationship between some $X$ and $Y$, or}
+        \]  
+        \[
+        H_1: \mbox{at least one $\beta_j \neq 0$}.  
+        \]
+    \item \textbf{F-statistics}
+        \[
+          F = \frac{(TSS - RSS) / p}{RSS / (n-p-1)}
+        \]   
+  \end{itemize}
+}
+\frame{
+  \frametitle{Hypothesis testing of model utility}
+  \begin{itemize}[<+->]
+    \item If F-statistic is large, we have more evidence to reject $H_0$.
+    \item F-statistics follow a F distribution (df: $(p, n-p-1)$) if
+          \begin{itemize}[<+->]
+            \item $\epsilon_i$ follow a normal distribution (our assumption),
+            \item or if $\epsilon_i$ are not normally distributed, F-statistic still follow F distribution \textit{approximated} if $n$ is large. 
+          \end{itemize}
+    \item How large is large? Look for p-values!  
+    \item \red{Caveat:} notice we need degree of freedom $n-p-1 > 0 \rightarrow$ F-test not useful when $n \leq p$!
+  \end{itemize}
+}
+\frame{
+\frametitle{Hypothesis testing of single regression coefficient}
+\begin{enumerate}
+  \item \gray{Is there a relationship between response $Y$ and any predictors $X_1, .., X_p$.}
+  \item \blue{How accurately can we estimate the effects of $X$ on $Y$?}
+  \item Which predictors predict/explain $Y$?
+  \item How accurate can we predict (future) $Y$?
+    \item Other considerations?
+
+\end{enumerate}
+}
+
+\frame{
+  \frametitle{Hypothesis testing of single regression coefficient}  
+  \begin{itemize}[<+->]
+    \item $\hat\beta_j$: additional contribution of $\bx_j$ on $\by$ conditional or $\bx_0, ..., \bx_{j-1}, \bx_{j+1}, ..., \bx_p$.
+    \item $\hat\beta_j$ follows a t-distribution (usually approximated by Normal distribution).
+    \item Testing $H_0: \beta_j = 0$ v.s. $H_1: \beta_j \neq 0$ adjusting other predictors
+          \begin{itemize}[<+->]
+            \item F-test, or Analysis of Variance (ANOVA)
+            \item t-test
+          \end{itemize}
+  \end{itemize}
+}
+\frame{
+  \frametitle{Hypothesis testing of single regression coefficient}  
+  \begin{itemize}[<+->]
+    \item F-test
+        \begin{itemize}[<+->]
+          \item Comparing the full model ($\by = f(\bx_1, ..., \bx_p$)) with the reduced model ($\by = f(\bx_1, ..., \bx_{j-1}, \bx_{j+1}, ..., \bx_p$)).
+          \item \textit{Formula for test statistic $F^*$ omitted here.}
+        \end{itemize}
+    \item t-test
+          \[
+              t^* = \frac{\hat\beta}{se(\hat\beta)}
+          \]
+    \item Interpretation of p-value: conditional on all other estimated coefficients, when the true $\beta_j = 0$, obtaining a $\hat\beta_j \neq 0$ has probability ...   
+  \end{itemize}
+}
+
+\frame{
+  \frametitle{Example: Carseats dataset}
+   \begin{itemize}[<+->]
+     \item \textit{Carseats}: dataset in the \textit{ISLR} library
+     \item \textit{Sales}: unit sales (in thousands) of child car seats at each location.
+      \item \textit{Price}: Price company charges for car seats at each site
+     \item \textit{CompPrice}: Price charged by competitor at each location
+      \item \textit{Income}: Community income level (in thousands of dollars)
+      \item \textit{Advertising}: Local advertising budget for company at each
+          location (in thousands of dollars)
+      \item \textit{Population} Population size in region (in thousands)
+      \item ...
+   <<data, eval=TRUE>>=
+    @
+   \end{itemize}
+   
+}
+\begin{frame}[fragile]
+  \frametitle{Example: Regression in R}
+  \scriptsize
+  <<regression, eval=TRUE>>=
+    @
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Example: F-test of single coefficient}
+  \scriptsize
+  <<regression2, eval=TRUE>>=
+    @
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Example: Diagnostic plots}
+  \scriptsize
+  <<regression3, eval=TRUE, out.width='.65\\linewidth', fig.width = 6, fig.height = 6>>=
+    @
+\end{frame}
+
+\frame{
+\frametitle{Select subset of useful predictors}
+\begin{enumerate}
+  \item \gray{Is there a relationship between response $Y$ and any predictors $X_1, .., X_p$.}
+   \item \gray{How accurately can we estimate the effects of $X$ on $Y$?}
+   \item \blue{Which predictors predict/explain $Y$}?
+  \item How accurate can we predict (future) $Y$?
+    \item Other considerations?
+
+\end{enumerate}
+}
+
+
+\frame{
+  \frametitle{Variable selection}
+  
+  \begin{itemize}[<+->]
+    \item If $p$ is large, looking at individual $p$-values is misleading
+          \begin{itemize}[<+->]
+            \item p-value $< 0.05$: When $\beta_j = 0$, obtaining a $\hat\beta_j \neq 0$ has probability smaller than $0.05$.
+            \item i.e., if $p=100$, we expect $5$ variables that are wrongly discovered as useful predictors \textit{by chance}.
+          \end{itemize}
+    \item F-test does not suffer from this problem, but require $n > p$.
+    \item Also a problem for interpretation.
+    \item How to reduce $p$?
+  \end{itemize}
+}
+\frame{
+  \frametitle{Variable selection}
+    \begin{itemize}[<+->]
+      \item Best-subset selection
+            \begin{itemize}[<+->]
+              \item Try every possible subset of size $1, 2, 3, ..., p$.
+              \item Only feasible when $p$ is small.
+            \end{itemize}
+      \item Forward selection
+            \begin{itemize}[<+->]
+              \item Begin with a model with only intercept.
+              \item Try each one of the $p$ variables, and \textbf{add} the variable that result in lowest RSS.
+              \item Repeat to add more.
+            \end{itemize}
+       \item Backward selection (if $p \leq n$)
+            \begin{itemize}[<+->]
+              \item Begin with a model with all predictors.
+              \item Try each one of the $p$ variables, and \textbf{remove} the variable that result in lowest RSS.
+              \item Repeat to remove more.
+            \end{itemize}   
+        \item More elegant approaches later in the course (LASSO, ridge regression, etc.)      
+    \end{itemize}
+}
+\begin{frame}[fragile]
+  \frametitle{Example: Backward selection (FYI)}
+  \scriptsize
+  <<selection, eval=TRUE>>=
+    @
+\end{frame}
+% %================================================================%
+% \section{Evaluate Model Fitting}
+% \stepcounter{subsection}
+% \frame{
+%   \frametitle{}
+% }
+
+%================================================================%
+\section{Prediction}
+\stepcounter{subsection}
+\frame{
+\frametitle{Prediction interval}
+\begin{enumerate}
+  \item \gray{Is there a relationship between response $Y$ and any predictors $X_1, .., X_p$.}
+   \item \gray{How accurately can we estimate the effects of $X$ on $Y$?}
+   \item \gray{Which predictors predict/explain $Y$?}
+  \item \blue{How accurate can we predict (future) $Y$?}
+  \item Other considerations?
+\end{enumerate}
+}
+
+\frame{
+  \frametitle{Prediction interval}
+  \begin{itemize}[<+->]
+    \item $\hat y | \bx = \hat\beta_0 + \hat\beta_1x_1 + ... + \hat\beta_px_p$
+    \item Confidence interval of $\hat y | \bx$
+      \begin{itemize}[<+->]
+        \item Given a fixed $\bx$, $\hat y$ can mean \blue{the average response for all observations with $\bx$}.
+        \item e.g., on average, how many species live on an island with characteristics a, b, and c.
+      \end{itemize}
+
+    \item Prediction interval of $\hat y | \bx$
+      \begin{itemize}[<+->]
+        \item Given a fixed $\bx$, $\hat y$ can also mean \blue{the response for one particular observations with $\bx$}.
+        \item e.g., predict how many species live on Long Island, given we know that it has characteristics a, b, and c.
+      \end{itemize}
+      \item Different variance calculation of $\hat y$.
+      \item The later is always wider.
+  \end{itemize}
+
+}
+\begin{frame}[fragile]
+  \frametitle{Example: Prediction}
+  \scriptsize
+  <<interval, eval=TRUE>>=
+    @
+\end{frame}
+%================================================================%
+\section{Complications}
+\stepcounter{subsection}
+\frame{
+\frametitle{Other complications}
+\begin{enumerate}
+  \item \gray{Is there a relationship between response $Y$ and any predictors $X_1, .., X_p$.}
+   \item \gray{How accurately can we estimate the effects of $X$ on $Y$?}
+   \item \gray{Which predictors predict/explain $Y$?}
+  \item \gray{How accurate can we predict (future) $Y$?}
+  \item \blue{Other considerations?}
+      \begin{itemize}[<+->]
+        \item A lot of them!
+      \end{itemize}
+\end{enumerate}
+}
+\frame{
+  \frametitle{What assumptions of linear regression are we making?}
+  ...and what if they are violated.
+  \begin{itemize}[<+->]
+    \item Linear relationship (\textit{nonlinearity})
+    \item Independence of errors (\textit{correlation of errors})
+    \item Constant variance of errors, or homoscedasticity (\textit{non-constant variance of errors})
+    \item No or little multicollinearity (\textit{multicollinearity})
+  \end{itemize}
+   \textit{Caveat: Normality of error terms is also an assumption in the standard setting, but inference is still valid if normality is violated but sample size is large. However, prediction interval is problematic in this case.}
+}
+\frame{
+  \frametitle{Non-linearity}
+  \begin{itemize}[<+->]
+    \item Problem: if the `straight-line' relationship does not hold, \textit{all conclusions we draw may be wrong!}
+    \item Identify non-linearity
+        \begin{itemize}[<+->]
+          \item Residual plot
+        \end{itemize}
+    \item Possible treatment:
+          \begin{itemize}[<+->]
+             \item Transforming your data, e.g., $\sqrt{X}, log(X)$, ...
+           \end{itemize} 
+  \end{itemize}
+}
+\begin{frame}[fragile]
+  \frametitle{Example: Residual plot}
+  \scriptsize
+  <<residual, eval=TRUE, out.width='.7\\linewidth', fig.width = 7, fig.height = 4>>=
+    @
+\end{frame}
+\frame{
+  \frametitle{Correlation of error terms}
+  \begin{itemize}[<+->]
+    \item Problem: if error terms are correlated, estimated standard errors will tend to be smaller, i.e., smaller CI and PI.
+    \item Examples:
+          \begin{itemize}[<+->]
+            \item Time-series: $Y_i$: temperature of Seattle on day $i$.
+            \item Clustered: $Y_i$: scores of every homework of everyone in class.
+            \item Extreme errors: replicated data, ...
+          \end{itemize}
+    \item Possible treatment: many but outside the scope of this class.      
+  \end{itemize}
+}
+
+\begin{frame}[fragile]
+  \frametitle{Example: Effect of replicating the same data}
+  \scriptsize
+  <<double, eval=TRUE>>=
+    @
+\end{frame}
+\begin{frame}[fragile]
+  \frametitle{Example: Effect of replicating the same data}
+  \scriptsize
+  <<double2, eval=TRUE>>=
+    @
+\end{frame}
+
+\frame{
+  \frametitle{Non-constant variance of error terms}
+  \begin{itemize}[<+->]
+    \item Problem: if error terms do not have constant variance (\textit{heteroscedasticity}), again everything could go wrong.
+    \item Possible treatment: 
+        \begin{itemize}[<+->]
+          \item Transform the response variable, e.g., $\sqrt{Y}, log(Y)$, ...
+          \item Weighted least squares (if you know a reasonable set of weights)
+        \end{itemize}
+  \end{itemize}
+}
+
+\begin{frame}[fragile]
+  \frametitle{Example: More residual plot}
+  \scriptsize
+  <<weight, eval=TRUE, out.width='.7\\linewidth', fig.width = 5, fig.height = 5>>=
+    @
+\end{frame}
+\begin{frame}[fragile]
+  \frametitle{Example: More residual plot}
+  \scriptsize
+  <<weight2, eval=TRUE, out.width='.7\\linewidth', fig.width = 7, fig.height = 4>>=
+    @
+    \textit{The weighted least square correction is only FYI.}
+\end{frame}
+
+\frame{
+  \frametitle{Collinearity}
+  \begin{itemize}[<+->]
+    \item Problem: Some predictors are correlated, which can reduce the accuracy of the $\hat\beta_j$.
+    \item Intuitively, it is difficult to separate effects of individual predictors if they are correlated.
+    \item Possible treatment: read the textbook about \textit{variance inflation factor}.
+  \end{itemize}
+}
+
+
+\frame{
+  \frametitle{Outliers}
+  \begin{itemize}[<+->]
+    \item Problem: some points have very different $y_i$ than $\hat{y_i}$, which can change RSE and $R^2$ significantly.
+    \item Example: regression of height on weight using a dataset containing Manute Bol ($y =$ 7'7'', $x =$ 210 lb).
+    \item Possible treatment: double check your data is correct. 
+  \end{itemize}
+}
+
+\frame{
+  \frametitle{High-leverage points}
+  \begin{itemize}[<+->]
+    \item Problem: some points have very unusual $x_i$, which can change the regression line significantly.
+    \item Example: regression of height on weight using a dataset containing \green{the Hulk} ($y =$ 7'6'', $x =$ 1150 lb).
+    \item High-leverage points are hard to eyeball in multivariate regression.
+    \item Read more in textbook about \textit{leverage statistic}.
+    \item Possible treatment: double check your data is correct.
+  \end{itemize}
+}
+
+
+\end{document}

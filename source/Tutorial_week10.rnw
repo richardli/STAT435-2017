@@ -1,0 +1,479 @@
+\documentclass[usenames,dvipsnames,10pt,compress, handout]{beamer} 
+\let\Tiny=\tiny
+\usepackage{eqnarray,amsmath}
+% \usepackage{wasysym}
+\usepackage{mathtools}
+\usepackage{multirow}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{multirow}
+% \usepackage{bigstrut}
+\usepackage{graphicx}
+\usepackage[round]{natbib}
+\usepackage{bm}
+
+\setbeamertemplate{navigation symbols}{}    
+\setbeamertemplate{footline}[frame number]{}
+\usepackage{soul}
+\usetheme{Singapore}
+
+%Misc Commands
+\newcommand{\mbf}{\mathbf}
+\newcommand{\lexp}{$\overset{\mbox{\tiny 0}}{e}$}
+\newenvironment{wideitemize}{\itemize\addtolength{\itemsep}{5pt}}{\enditemize}
+
+
+\newcommand{\bx}{{\bm x}}
+\newcommand{\bX}{{\bm X}}
+\newcommand{\by}{{\bm y}}
+\newcommand{\bY}{{\bm Y}}
+\newcommand{\bW}{{\bm W}}
+\newcommand{\bG}{{\bm G}}
+\newcommand{\bR}{{\bm R}}
+\newcommand{\bZ}{{\bm Z}}
+\newcommand{\bV}{{\bm V}}
+\newcommand{\bL}{{\bm L}}
+\newcommand{\bz}{{\bm z}}
+\newcommand{\be}{{\bm e}}
+\newcommand{\bgamma}{{\bm \gamma}}
+\newcommand{\bbeta}{{\bm \beta}}
+\newcommand{\balpha}{{\bm \alpha}}
+\newcommand{\bSigma}{{\bm \Sigma}}
+\newcommand{\bmu}{{\bm \mu}}
+\newcommand{\btheta}{{\bm \theta}}
+\newcommand{\bepsilon}{{\bm \epsilon}}
+\newcommand{\bone}{{\bm 1}}
+\newcommand{\bzero}{{\bm 0}}
+\newcommand{\bC}{{\bm C}}
+\newcommand{\bI}{{\bm I}}
+\newcommand{\bA}{{\bm A}}
+\newcommand{\bB}{{\bm B}}
+\newcommand{\bQ}{{\bm Q}}
+\newcommand{\bS}{{\bm S}}
+\newcommand{\bD}{{\bm D}}
+\newcommand{\cQ}{\mathcal{Q}}
+\newcommand{\cU}{\mathcal{U}}
+\newcommand{\cI}{\mathcal{I}}
+\newcommand{\cL}{\mathcal{L}}
+\newcommand{\orange}{\textcolor{Orange}}
+\newcommand{\green}{\textcolor{green}}
+\newcommand{\blue}{\textcolor{blue}}
+\newcommand{\red}{\textcolor{red}}
+\newcommand{\purple}{\textcolor{purple}}
+\newcommand{\gray}{\textcolor{gray}}
+\newcommand{\ok}{\nonumber}
+
+% Adjust vertical spacing in lists
+\makeatletter
+\def\@listi{\leftmargin\leftmargini
+            \topsep     8\p@ \@plus2\p@ \@minus2.5\p@
+            \parsep     0\p@
+            \itemsep  5\p@ \@plus2\p@ \@minus3\p@}
+\let\@listI\@listi
+\def\@listii{\leftmargin\leftmarginii
+              \topsep    6\p@ \@plus1\p@ \@minus2\p@
+              \parsep    0\p@ \@plus\p@
+              \itemsep  3\p@ \@plus2\p@ \@minus3\p@}
+\def\@listiii{\leftmargin\leftmarginiii
+              \topsep    3\p@ \@plus1\p@ \@minus2\p@
+              \parsep    0\p@ \@plus\p@
+              \itemsep  2\p@ \@plus2\p@ \@minus3\p@}
+\makeatother
+% Dealing with fraile envrionment of beamer with codes
+\newenvironment{xframe}[2][]
+  {\begin{frame}[fragile,environment=xframe,#1]
+  \frametitle{#2}}
+  {\end{frame}}
+
+<<setup, include=FALSE, cache=FALSE>>=
+library(knitr)
+library(formatR)
+# set global chunk options
+opts_chunk$set(fig.path='figure/', fig.align='center', fig.show='hold')
+opts_chunk$set(warning=FALSE, message=FALSE, error=FALSE) 
+options(replace.assign=TRUE,width=90)
+opts_chunk$set(tidy=FALSE)
+opts_chunk$set(cache=TRUE)
+read_chunk('codes/week9.R')
+@
+
+
+\title{Stat 435 Intro to Statistical Machine Learning}
+\subtitle{Week 10: Time to recap! (and a little more SVM of course)}
+
+\author[]{Richard Li}
+\date{\today}
+% \titlegraphic{\includegraphics[width=.8\textwidth]{fun/HauntedForest.jpg}}
+
+
+\begin{document}
+\maketitle
+%================================================================%
+\section{SVM}
+\stepcounter{subsection}
+\frame{
+  \frametitle{SVM: a summary}
+  Binary response: $y_i \in \{-1, 1\}$
+  \begin{itemize}
+    \item Maximal margin classifier
+    \vspace{.2cm}
+
+    \includegraphics[width = .7\textwidth]{figure/mmc.png}
+    
+    \item Support vector classifier
+    \item Support vector classifier (alternative representation)
+    \item Support vector machine
+  \end{itemize}
+   
+}
+\frame{
+  \frametitle{SVM: a summary}
+  Binary response: $y_i \in \{-1, 1\}$
+  \begin{itemize}
+    \item Maximal margin classifier
+    
+    \item Support vector classifier
+     \vspace{.2cm}
+    
+    \includegraphics[width = .7\textwidth]{figure/svc.png}
+    \item Support vector classifier (alternative representation)
+    \item Support vector machine
+  \end{itemize}
+   
+}
+
+\frame{
+  \frametitle{SVM: a summary}
+  Binary response: $y_i \in \{-1, 1\}$
+  \begin{itemize}
+    \item Maximal margin classifier
+    
+    \item Support vector classifier
+     \vspace{.2cm}
+    
+    \includegraphics[width = .7\textwidth]{figure/svc.png}
+    \item Support vector classifier (alternative representation)
+    \vspace{.2cm}
+    
+    \includegraphics[width = .7\textwidth]{figure/svc2.png}
+    \item Support vector machine
+  \end{itemize}
+   
+}
+
+\frame{
+  \frametitle{SVM: a summary}
+  Binary response: $y_i \in \{-1, 1\}$
+  \begin{itemize}
+    \item Maximal margin classifier
+    
+    \item Support vector classifier
+    \item Support vector classifier (alternative representation)
+    \vspace{.2cm}
+    
+    \includegraphics[width = .7\textwidth]{figure/svc2.png}
+    \item Support vector machine
+    \vspace{.2cm}
+    
+    \includegraphics[width = .7\textwidth]{figure/svm.png}
+  \end{itemize}
+   
+}
+
+\frame{
+  \frametitle{Relationship with logistic regression}
+  \begin{itemize}
+    \item Yet another way to write support vector classifier \pause
+    \vspace{.2cm}
+    
+    \includegraphics[width = .7\textwidth]{figure/svc3.png}\pause
+
+    \item The first part is a ``loss function''
+        \begin{itemize}
+          \item ...which is very similar to the loss function we minimize in logistic regression\pause
+        \end{itemize}
+    \item The second part is a ridge penalty!
+  \end{itemize}
+}
+
+\frame{
+  \frametitle{Overfitting, curse of dimensionality}
+  \begin{itemize}
+    \item In practice, SVM usually used when data is high dimensional
+    \item It tends to be resistant to overfitting because of the regularization
+  \pause
+    \item BUT, successful implementation of SVM still depends on careful tunning of \pause 
+      \begin{itemize}
+              \item $C$  \pause
+              \item kernel (imagine you want to cut the skins of an orange by a linear plane)
+            \end{itemize}             
+  \end{itemize}
+}
+
+\frame{
+  \frametitle{The kernel trick}
+  \begin{itemize}
+    \item Yes that is the formal name... \pause
+    \item A general approach to turn linear functions into nonlinear functions\pause
+    \item What it does equivalently: transform data into higher dimensional space (without explicitly calculating/storing the transformation)\pause
+      \begin{itemize}
+        \item Instead of $\langle x_i, x_j \rangle$, $K(x_i, x_j)$ can be thought of as $\langle x'_i, x'_j\rangle$ where $x'$ is of a higher dimension than $x$.\pause
+        \item e.g., a polynomial kernel \[
+        K([a, b], [c, d]) = (ac + bd + 5)^2 = a^2c^2 + 2acbd + 10ac +10cd + b^2d^2 + 25
+        \]\pause
+        \item equivalently, 
+        \[
+        K([a, b], [c, d]) = \langle 
+        \begin{bmatrix}
+        a^2 \\ b^2\\ \sqrt{2} ab \\ \sqrt{10}a \\ \sqrt{10} b \\ 5
+        \end{bmatrix}, 
+        \begin{bmatrix}
+        c^2 \\ d^2\\ \sqrt{2} cd \\ \sqrt{10}c \\ \sqrt{10} d \\5
+        \end{bmatrix} \rangle
+        \]\pause
+        which transforms our data in $\mathbb R^2$ to $\mathbb R^5$
+      \end{itemize}
+  
+  \end{itemize}
+}
+
+\frame{
+  \frametitle{The kernel trick}
+  $[x_1, x_2] \rightarrow [x_1, x_2, x_1^2 + x_2^2]$
+
+  \vspace{.3cm}
+  \includegraphics[width = 1.1\textwidth]{figure/kernel.png}
+
+  But You don't need to look for such transformations directly (difficult in high dimensions!), thus ``trick'' as in ``the kernel trick''
+}
+
+\frame{
+  \frametitle{The kernel trick}
+  \begin{itemize}
+    \item It can be used in regression
+    \item It can be used in PCA
+    \item It can be used in KNN
+    \item In many algorithms where you see $x^Tx$, chances are the kernel trick can be applied...
+  \end{itemize}
+
+  \textit{One of the last general methods in this course!}
+}
+%================================================================%
+\section{What you have learned}
+\stepcounter{subsection}
+ \frame{
+  \frametitle{So now let's look back at what we have learned in this class}
+   \pause
+   \centering
+   \includegraphics[width = .94\textwidth]{fun/jsnow.jpg}
+}
+
+ \frame{
+  \frametitle{What you have learned}
+  First of all, 
+   \begin{itemize}
+     \item Believe it or not, you almost finished a book with 400+ pages!
+   \end{itemize}
+   \pause
+
+   Now it's a good time to review how we get here...
+   \begin{itemize}
+     \item What is statistical learning? \pause
+            \begin{itemize}
+              \item Tools for \textit{understanding data}
+            \end{itemize} \pause
+      \item In what kind of problems do we need to understand data? \pause
+            \begin{itemize}
+                \item Predictive, an outcome we want to predict  
+                \item Descriptive, understand relationship and structures in data
+              \end{itemize}   \pause
+      \item What tools have we learned?        
+   \end{itemize}
+}
+
+\frame{
+  \frametitle{Tools}
+  Is their an outcome? \pause
+  \begin{itemize}
+    \item Supervised:
+    \item Unsupervised: 
+  \end{itemize} \pause
+
+  Is the outcome qualitative or quantitative? \pause
+  \begin{itemize}
+    \item Linear regression, more regression (stepwise, ridge, lasso, PCR, PLS, etc.), splines, regression trees, GAM, ...
+    \item KNN, LDA, QDA, logistic regression, SVM, decision trees, ...
+  \end{itemize} \pause
+
+  Do you want to reduce or enrich the complexity?
+  \begin{itemize}
+    \item Regularization: stepwise, ridge, and lasso regression, ...
+    \item Non-linear: polynomial regression, splines, local regression, GAM, ...
+  \end{itemize}
+  \pause
+  Do we care about model interpretability or just prediction accuracy
+  \begin{itemize}
+    \item See figure 2.7 of text book (page 25)
+  \end{itemize}
+}
+
+\frame{
+  \frametitle{Common considerations}
+  THE Bias-Variance Trade-Off
+  \begin{itemize}
+    \item Model selection: Cross-validation
+    \item Model selection: AIC, BIC, $C_p$, adjusted $R^2$, ... \pause
+    \item Reducing variance: bagging, boosting, random forest
+  \end{itemize}
+  \pause
+  Related reoccurring topics (in high dimensional data)
+  \begin{itemize}
+    \item Simpler model is more favorable: \textit{Penalization}
+    \item More flexible model is more favorable (if can be computed efficiently): \textit{Kernel methods}
+  \end{itemize}
+}
+
+\frame{
+  \frametitle{A quick ride in statistical learning land}
+  \centering
+  \large
+  But incomplete and not meant as the full material for final!
+}
+
+\frame{
+  \frametitle{Bias-Variance Trade-off}
+    \blue{Our journey begins with a broad goal} \pause
+    \begin{itemize}
+      \item MSE 
+      \item Can you still derive it? (\textit{midterm problem})\pause
+      \item Where does variance and bias come from? (\textit{Week5}) \pause
+      \item Implications, e.g., correct model does not always give best MSE (\textit{midterm, Week5}) \pause
+      \item Bayes classifier / Bayes error rate (\textit{HW1, Week1})
+    \end{itemize}
+
+}
+\frame{
+  \frametitle{Linear regression}
+  \blue{Then there came a `simple' problem}\pause
+  \begin{itemize}
+    \item Derivation (\textit{HW2}) \pause
+    \item Interpretation, tests, diagnostics (\textit{week2}) \pause
+    \item Extensions (\textit{week2})
+          \begin{itemize}
+            \item Interaction (interpretation!)
+            \item Qualitative predictors
+          \end{itemize}
+  \end{itemize}
+}
+\frame{
+  \frametitle{Classification}
+  \blue{Then a little more complication with the outcome}\pause
+  \begin{itemize}
+    \item Logistic regression 
+          \begin{itemize}
+            \item Derivation
+          \end{itemize} \pause
+    \item LDA and QDA (\textit{HW3})
+        \begin{itemize}
+          \item Decision boundary (\textit{week5}) \pause
+          \item Extensions (\textit{Midterm}) \pause
+          \item Bayes theorem / Bayes error rate (\textit{HW1, Week3, Midterm})
+        \end{itemize} \pause
+    \item KNN
+        \begin{itemize}
+          \item Intuition \pause
+          \item Why it might not be a good idea sometimes? (\textit{HW6})
+        \end{itemize}
+  \end{itemize}\pause
+  \blue{Of course, later we learned something more complicated}\pause
+  \begin{itemize}
+    \item (GAM)
+    \item Classification tree
+    \item SVM (related to logistic regression! Sec 9.5 textbook)
+  \end{itemize}
+}
+\frame{
+  \frametitle{Resampling}
+  \blue{Then we did a brief detour to learn about some magic tricks of creating testing data from nowhere (and had a midterm, eww!)}\pause
+  \begin{itemize}
+    \item Cross validation \pause
+      \begin{itemize}
+        \item Different approaches (\textit{week4}) \pause
+        \item How they compare? (\textit{week6})\pause
+      \end{itemize}
+    \item Bootstrap \pause
+      \begin{itemize}
+        \item Used for getting variance of estimator \pause
+        \item Used in bagging \pause
+        \item Properties (\textit{HW8})
+      \end{itemize}
+  \end{itemize}
+}
+\frame{
+  \frametitle{Model selection/regularization}
+  \blue{Then we encountered the dragon of high-dimensionality}\pause
+  \begin{itemize}
+    \item Subset selection  (\textit{HW4})
+          \begin{itemize}
+            \item Algorithms, how do MSE change at each step \pause
+          \end{itemize}
+    \item Shrinkage (ridge and lasso) (\textit{week6, week7, week8, HW4, HW5})
+          \begin{itemize}
+            \item Derivation \pause
+            \item Properties (exact zero, degrees of freedom, ...) \pause
+          \end{itemize}
+    \item Dimension reduction (\textit{week8})
+            \begin{itemize}
+              \item PCR and PLS
+              \item Intuitive understanding \pause
+            \end{itemize}
+     \item Why high-dimension is difficult?
+          \begin{itemize}
+                 \item curse of dimensionality  (\textit{week6, HW6})\pause
+           \end{itemize}       
+  \end{itemize}
+}
+\frame{
+  \frametitle{Nonlinear additive models}
+  \blue{Then we took a step back and started thinking about non-linearity}\pause
+  \begin{itemize}
+    \item Step functions, polynomial regressions, and regression splines (\textit{HW6})\pause
+    \item Smoothing splines (\textit{HW6})\pause
+    \item Generalized Additive Models (\textit{HW7}) 
+  \end{itemize}
+}
+\frame{
+  \frametitle{Trees}
+  \blue{Then we learned a completely new set of exotic skills that seem so simple but so difficult at the same time}\pause
+  \begin{itemize}
+    \item Regression and decision trees (\textit{HW7, week9}) \pause
+    \item Bagging, boosting, and random forest(\textit{week9})
+  \end{itemize}
+}
+\frame{
+  \frametitle{SVM and unsupervised learning}
+  \blue{Then there's the recent stuff, and they should still be fresh in your memory}
+}
+
+\frame{
+  \frametitle{There's a lot lot more to statistical learning}
+  \centering
+  % \includegraphics[width = .8\textwidth]{fun/three_eyed_raven.jpg}
+
+  \small
+  \begin{itemize}
+    \item[] \blue{Three-Eyed Raven:} \textit{You won't be here forever. You won't be an old man in a tree. But before you leave, you must learn. }
+    \item[] \blue{Bran Stark:} \textit{Learn what?} 
+    \item[] \blue{Three-Eyed Raven:} \textit{Hmm let's see, bias-variance tradeoff, regression, classification, cross-validation, regularization, model selection, dimension reduction splines, GAMs, trees, bagging, boosting, random forests, support vector machines, PCA, LDA, QDA, ...} 
+  \end{itemize}
+
+  \scriptsize{(Again, true script from Game of Thrones: Oathbreaker (\#6.3))}\pause
+  
+  \large{\red{\textbf{Course evaluation closing on Friday!}}}
+  \Large{\red{https://uw.iasystem.org/survey/174515}}
+
+  \large{Thank you!}
+
+}
+\end{document}

@@ -1,0 +1,269 @@
+\documentclass[usenames,dvipsnames,10pt,compress, final, handout]{beamer}
+\usepackage[]{graphicx}\usepackage[]{color}
+ \usepackage{alltt} 
+\let\Tiny=\tiny
+\usepackage{eqnarray,amsmath}
+% \usepackage{wasysym}
+\usepackage{mathtools}
+\usepackage{multirow}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{multirow}
+% \usepackage{bigstrut}
+\usepackage{graphicx}
+\usepackage[round]{natbib}
+\usepackage{bm}
+\usepackage{tikzsymbols}
+
+\setbeamertemplate{navigation symbols}{}    
+\setbeamertemplate{footline}[frame number]{}
+\usepackage{soul}
+\usetheme{Singapore}
+
+%Misc Commands
+\newcommand{\mbf}{\mathbf}
+\newcommand{\lexp}{$\overset{\mbox{\tiny 0}}{e}$}
+\newenvironment{wideitemize}{\itemize\addtolength{\itemsep}{5pt}}{\enditemize}
+
+
+\newcommand{\bx}{{\bm x}}
+\newcommand{\bX}{{\bm X}}
+\newcommand{\by}{{\bm y}}
+\newcommand{\bY}{{\bm Y}}
+\newcommand{\bW}{{\bm W}}
+\newcommand{\bG}{{\bm G}}
+\newcommand{\bR}{{\bm R}}
+\newcommand{\bZ}{{\bm Z}}
+\newcommand{\bV}{{\bm V}}
+\newcommand{\bL}{{\bm L}}
+\newcommand{\bz}{{\bm z}}
+\newcommand{\be}{{\bm e}}
+\newcommand{\bgamma}{{\bm \gamma}}
+\newcommand{\bbeta}{{\bm \beta}}
+\newcommand{\balpha}{{\bm \alpha}}
+\newcommand{\bSigma}{{\bm \Sigma}}
+\newcommand{\bmu}{{\bm \mu}}
+\newcommand{\btheta}{{\bm \theta}}
+\newcommand{\bepsilon}{{\bm \epsilon}}
+\newcommand{\bone}{{\bm 1}}
+\newcommand{\bzero}{{\bm 0}}
+\newcommand{\bC}{{\bm C}}
+\newcommand{\bI}{{\bm I}}
+\newcommand{\bA}{{\bm A}}
+\newcommand{\bB}{{\bm B}}
+\newcommand{\bQ}{{\bm Q}}
+\newcommand{\bS}{{\bm S}}
+\newcommand{\bD}{{\bm D}}
+\newcommand{\cQ}{\mathcal{Q}}
+\newcommand{\cU}{\mathcal{U}}
+\newcommand{\cI}{\mathcal{I}}
+\newcommand{\cL}{\mathcal{L}}
+\newcommand{\orange}{\textcolor{Orange}}
+\newcommand{\green}{\textcolor{green}}
+\newcommand{\blue}{\textcolor{blue}}
+\newcommand{\red}{\textcolor{red}}
+\newcommand{\purple}{\textcolor{purple}}
+\newcommand{\gray}{\textcolor{gray}}
+\newcommand{\ok}{\nonumber}
+
+% Adjust vertical spacing in lists
+\makeatletter
+\def\@listi{\leftmargin\leftmargini
+            \topsep 		8\p@ \@plus2\p@ \@minus2.5\p@
+            \parsep 		0\p@
+            \itemsep	5\p@ \@plus2\p@ \@minus3\p@}
+\let\@listI\@listi
+\def\@listii{\leftmargin\leftmarginii
+              \topsep    6\p@ \@plus1\p@ \@minus2\p@
+              \parsep    0\p@ \@plus\p@
+              \itemsep  3\p@ \@plus2\p@ \@minus3\p@}
+\def\@listiii{\leftmargin\leftmarginiii
+              \topsep    3\p@ \@plus1\p@ \@minus2\p@
+              \parsep    0\p@ \@plus\p@
+              \itemsep  2\p@ \@plus2\p@ \@minus3\p@}
+\makeatother
+% Dealing with fraile envrionment of beamer with codes
+\newenvironment{xframe}[2][]
+  {\begin{frame}[fragile,environment=xframe,#1]
+  \frametitle{#2}}
+  {\end{frame}}
+
+
+% trick to make all itemize pause
+% \usepackage{letltxmacro}
+% \LetLtxMacro\olditemize\itemize
+
+<<setup, include=FALSE, cache=FALSE>>=
+library(knitr)
+library(formatR)
+# set global chunk options
+opts_chunk$set(fig.path='figure/', fig.align='center', fig.show='hold')
+opts_chunk$set(warning=FALSE, message=FALSE, error=FALSE) 
+options(replace.assign=TRUE,width=90)
+opts_chunk$set(tidy=FALSE)
+opts_chunk$set(cache=TRUE)
+@
+
+\title{Stat 435 Intro to Statistical Machine Learning}
+\subtitle{Week 5: Additional exercises}
+
+\author[]{Richard Li}
+\date{\today}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+% \renewcommand{\itemize}[1][<+(1)->]{\olditemize[#1]}
+
+\maketitle
+%================================================================%
+\section{More recent stuff}
+\stepcounter{subsection}
+\frame{
+  \frametitle{Before we start, questions about this?}
+  \centering
+  \includegraphics[width=\textwidth]{figure/Tibshirani_slidesteal.png}
+  
+  \scriptsize\textit{(slide credit to Robert Tibshirani (NIPS,2015))}
+}
+%================================================================%
+\section{Bias-variance tradeoff}
+\stepcounter{subsection}
+\begin{frame}[fragile]
+\frametitle{Linear or cubic model?}
+Problem 1(d) in midterm
+\includegraphics[width = .9\textwidth]{figure/1d.png}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Linear or cubic model?}
+Problem 1(d) in midterm
+<<1d, eval = FALSE>>=
+set.seed(10)
+x <- rnorm(100)
+y1 <- 1 + 2 * x + 3 * x^2 + 4 * x^3 + rnorm(100, sd = 1)
+y2 <- 1 + 2 * x + 3 * x^2 + 4 * x^3 + rnorm(100, sd = 10)
+y3 <- 1 + 2 * x + 3 * x^2 + 4 * x^3 + rnorm(100, sd = 100)
+y4 <- 1 + 2 * x + 3 * x^2 + 4 * x^3 + rnorm(100, sd = 1000)
+@
+\end{frame}
+
+\frame{
+  \frametitle{Linear or cubic model?}
+  \blue{Blue}: linear fit. \red{Red}: Cubic fit. \orange{Orange}: true relationship
+  \centering
+  \includegraphics[width = .75\textwidth]{figure/cubic.pdf}
+}
+
+\frame{
+  \frametitle{Linear or cubic model?}
+  \center
+  \Large
+  Correct model is not always the best model in terms of testing MSE!
+}
+
+\frame{
+  \frametitle{Bias-variance tradeoff revisited}
+
+}
+\frame{
+  \frametitle{Bias-variance tradeoff revisited}
+  
+}
+\frame{
+  \frametitle{Bias-variance tradeoff revisited}
+  
+}
+
+%================================================================%
+\section{Classification}
+\stepcounter{subsection}
+\frame{
+  \frametitle{QDA decision boundary}
+  Suppose that we have K classes, and that if an observation belongs to the kth class then X comes from a one-dimensional normal distribution, $X \sim N(\mu_k,\sigma_k^2)$. Prove that in this case, the Bayes’ classifier is not linear. Argue that it is in fact quadratic.
+  \vspace{3cm}
+}
+\frame{
+  \frametitle{QDA decision boundary}
+  
+}
+\frame{
+  \frametitle{QDA v.s. LDA}
+  \begin{itemize}
+    \item If the Bayes decision boundary is linear, do we expect LDA or QDA to perform better on the training set? On the test set?
+    \item If the Bayes decision boundary is non-linear, do we expect LDA or QDA to perform better on the training set? On the test set?
+    \item In general, as the sample size n increases, do we expect the test prediction accuracy of QDA relative to LDA to improve, decline, or be unchanged? Why?
+  \end{itemize}
+ \vspace{2cm}
+}
+
+\frame{
+  \frametitle{QDA v.s. LDA}
+
+}
+\frame{
+  \frametitle{QDA v.s. LDA}
+
+}
+
+\frame{
+\frametitle{Curse of dimensionality}
+
+Suppose that we have a set of observations, each with measurements on $p=1$ feature, $X$. We assume that $X$ is uniformly (evenly) distributed on $[0,1]$. Associated with each observation is a response value. 
+
+Suppose that we wish to predict a test observation’s response using only observations that are within 10\% of the range of $X$ closest to that test observation. 
+
+For instance, in order to predict the response for a test observation with $X=0.6$, we will use observations in the range $[0.55,0.65]$. On average, what fraction of the available observations will we use to make the prediction ?
+\vspace{2cm}
+
+}
+
+\frame{
+\frametitle{Curse of dimensionality}
+
+Now suppose that we have a set of observations, each with measurements on $p = 2$ features, $X_1$ and $X_2$. We assume that $(X_1, X_2)$ are uniformly distributed on $[0, 1] \times [0, 1]$. We wish to predict a test observation’s response using only observations that are within 10\% of the range of $X_1$ and within 10\% of the range of $X_2$ closest to that test observation. On average, what fraction of the available observations will we use to make the prediction ?
+\vspace{3cm}
+
+}
+\frame{
+\frametitle{Curse of dimensionality}
+What if $p = 100$?
+\vspace{5cm}
+
+}
+\frame{
+\frametitle{Curse of dimensionality}
+
+}
+%================================================================%
+\section{Resampling methods}
+\stepcounter{subsection}
+\frame{
+  \frametitle{Comparing resampling methods}
+  Consider a very simple model,
+\[Y = \beta + \epsilon\]
+where $Y$ is a scalar response variable, $\beta$ is an unknown parameter, and $\epsilon$ is a noise term with $E(\epsilon) = 0$, $Var(\epsilon) = \sigma^2$. Assume that we have $n$ observations with uncorrelated errors. Show that
+\begin{enumerate}
+  \item Validation set approach over-estimate the expected test error.
+  \item LOOCV does not substantially over-estimate the expected test error, provided that $n$ is large.
+  \item K-fold CV provides an over-estimate of the expected test error that is somewhere between the other two approaches
+\end{enumerate}
+  
+}
+
+\frame{
+  \frametitle{Comparing resampling methods}
+  }
+
+\frame{
+  \frametitle{Comparing resampling methods}
+  }
+ 
+\frame{
+  \frametitle{Comparing resampling methods}
+  }
+\frame{
+  \frametitle{Comparing resampling methods}
+  Additional question: How about variance of test error?
+  }
+
+\end{document}

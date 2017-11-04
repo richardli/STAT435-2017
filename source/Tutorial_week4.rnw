@@ -1,0 +1,590 @@
+\documentclass[usenames,dvipsnames,10pt,compress, final, handout]{beamer}
+\usepackage[]{graphicx}\usepackage[]{color}
+ \usepackage{alltt} 
+\let\Tiny=\tiny
+\usepackage{eqnarray,amsmath}
+% \usepackage{wasysym}
+\usepackage{mathtools}
+\usepackage{multirow}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{multirow}
+% \usepackage{bigstrut}
+\usepackage{graphicx}
+\usepackage[round]{natbib}
+\usepackage{bm}
+\usepackage{tikzsymbols}
+
+\setbeamertemplate{navigation symbols}{}    
+\setbeamertemplate{footline}[frame number]{}
+\usepackage{soul}
+\usetheme{Singapore}
+
+%Misc Commands
+\newcommand{\mbf}{\mathbf}
+\newcommand{\lexp}{$\overset{\mbox{\tiny 0}}{e}$}
+\newenvironment{wideitemize}{\itemize\addtolength{\itemsep}{5pt}}{\enditemize}
+
+
+\newcommand{\bx}{{\bm x}}
+\newcommand{\bX}{{\bm X}}
+\newcommand{\by}{{\bm y}}
+\newcommand{\bY}{{\bm Y}}
+\newcommand{\bW}{{\bm W}}
+\newcommand{\bG}{{\bm G}}
+\newcommand{\bR}{{\bm R}}
+\newcommand{\bZ}{{\bm Z}}
+\newcommand{\bV}{{\bm V}}
+\newcommand{\bL}{{\bm L}}
+\newcommand{\bz}{{\bm z}}
+\newcommand{\be}{{\bm e}}
+\newcommand{\bgamma}{{\bm \gamma}}
+\newcommand{\bbeta}{{\bm \beta}}
+\newcommand{\balpha}{{\bm \alpha}}
+\newcommand{\bSigma}{{\bm \Sigma}}
+\newcommand{\bmu}{{\bm \mu}}
+\newcommand{\btheta}{{\bm \theta}}
+\newcommand{\bepsilon}{{\bm \epsilon}}
+\newcommand{\bone}{{\bm 1}}
+\newcommand{\bzero}{{\bm 0}}
+\newcommand{\bC}{{\bm C}}
+\newcommand{\bI}{{\bm I}}
+\newcommand{\bA}{{\bm A}}
+\newcommand{\bB}{{\bm B}}
+\newcommand{\bQ}{{\bm Q}}
+\newcommand{\bS}{{\bm S}}
+\newcommand{\bD}{{\bm D}}
+\newcommand{\cQ}{\mathcal{Q}}
+\newcommand{\cU}{\mathcal{U}}
+\newcommand{\cI}{\mathcal{I}}
+\newcommand{\cL}{\mathcal{L}}
+\newcommand{\orange}{\textcolor{Orange}}
+\newcommand{\green}{\textcolor{green}}
+\newcommand{\blue}{\textcolor{blue}}
+\newcommand{\red}{\textcolor{red}}
+\newcommand{\purple}{\textcolor{purple}}
+\newcommand{\gray}{\textcolor{gray}}
+\newcommand{\ok}{\nonumber}
+
+% Adjust vertical spacing in lists
+\makeatletter
+\def\@listi{\leftmargin\leftmargini
+            \topsep 		8\p@ \@plus2\p@ \@minus2.5\p@
+            \parsep 		0\p@
+            \itemsep	5\p@ \@plus2\p@ \@minus3\p@}
+\let\@listI\@listi
+\def\@listii{\leftmargin\leftmarginii
+              \topsep    6\p@ \@plus1\p@ \@minus2\p@
+              \parsep    0\p@ \@plus\p@
+              \itemsep  3\p@ \@plus2\p@ \@minus3\p@}
+\def\@listiii{\leftmargin\leftmarginiii
+              \topsep    3\p@ \@plus1\p@ \@minus2\p@
+              \parsep    0\p@ \@plus\p@
+              \itemsep  2\p@ \@plus2\p@ \@minus3\p@}
+\makeatother
+% Dealing with fraile envrionment of beamer with codes
+\newenvironment{xframe}[2][]
+  {\begin{frame}[fragile,environment=xframe,#1]
+  \frametitle{#2}}
+  {\end{frame}}
+
+
+% trick to make all itemize pause
+% \usepackage{letltxmacro}
+% \LetLtxMacro\olditemize\itemize
+
+<<setup, include=FALSE, cache=FALSE>>=
+library(knitr)
+library(formatR)
+# set global chunk options
+opts_chunk$set(fig.path='figure/', fig.align='center', fig.show='hold')
+opts_chunk$set(warning=FALSE, message=FALSE, error=FALSE) 
+options(replace.assign=TRUE,width=90)
+opts_chunk$set(tidy=FALSE)
+opts_chunk$set(cache=TRUE)
+@
+
+\title{Stat 435 Intro to Statistical Machine Learning}
+\subtitle{Week 4: Bootstrap and Subset Selection}
+
+\author[]{Richard Li}
+\date{\today}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+% \renewcommand{\itemize}[1][<+(1)->]{\olditemize[#1]}
+
+\maketitle
+%================================================================%
+\section{Plan}
+\stepcounter{subsection}
+\frame{
+\frametitle{Today}
+\begin{itemize}
+  \item First half: Finish Chapter 5
+      \begin{itemize}
+        \item Bootstrap
+      \end{itemize}
+  \item Second half: Beginning Chapter 6
+      \begin{itemize}
+        \item Subset selection
+        \item Model selection criterion
+      \end{itemize}
+\end{itemize}
+}
+
+\frame{
+  \frametitle{How we get here}
+  Training vs test error
+  \vspace{10cm}
+}
+
+\frame{
+  \frametitle{Where we go from here}
+  Estimating test error when there's no test data
+
+  \vspace{4cm}
+
+  A new task: measuring accuracy of parameters
+
+  \vspace{4cm}
+}
+
+%================================================================%
+\section{Chapter 5}
+\stepcounter{subsection}
+\frame{
+  \frametitle{Recall Cross-validation}
+  \begin{itemize}
+    \item Validation-set approach
+    \vspace{2cm}
+    \item LOOCV
+    \vspace{2cm}
+    \item K-fold Cross-validation
+  \end{itemize}
+}
+\frame{
+  \frametitle{Bootstrap}
+  \begin{itemize}
+    \item A quick detour from testing error.
+    \item When you obtain some coefficient $\hat\theta$, what to do next (as a statistician)?
+  \end{itemize}
+  \vspace{4cm}
+}
+
+\frame{
+  \frametitle{Bootstrap}
+  \begin{itemize}
+    \item bootstrap: \blue{to pull oneself up by one's bootstraps}
+  \end{itemize}
+
+  \begin{quote}
+  ``The Baron had fallen to the bottom of a deep lake. Just when it looked like all was lost, he thought to pick himself up by his own bootstraps.'' --``The Surprising Adventures of Baron Munchausen'' by  Rudolf Erich Raspe
+  \end{quote}
+}
+\frame{
+  \frametitle{An ideal world where you don't need bootstrap}
+  \begin{itemize}
+    \item $\hat\theta$: an estimator of median height of students attending UW
+  \end{itemize}
+  \vspace{8cm} 
+}
+\frame{
+  \frametitle{An ideal (meta)-world where you don't need bootstrap}
+  \begin{itemize}
+    \item For practical problems, typically you don't have a large number of collections of samples.
+    \item e.g., finding variance of a regression coefficient. 
+  \end{itemize},
+  \vspace{8cm}
+}
+
+\frame{
+  \frametitle{A real world where bootstrap is useful}
+  \begin{itemize}
+    \item Idea: the observed data contains all the information about the distribution of the parameter of interest.
+    \item A procedure that can be applied to a wide range of statistical methods where measure of variability could be hard to compute.
+  \end{itemize}
+}
+\frame{
+  \frametitle{When it looked like all was lost}
+  \begin{itemize}
+    \item A simple linear regression example: predict \texttt{mpg} using \texttt{horsepower}.
+    \item We only have one dataset, how to estimate $sd(\hat\beta_1)$.
+  \end{itemize}
+  \vspace{8cm}
+
+}
+
+\frame{
+  \frametitle{Pick himself up by his own bootstraps}
+  \begin{itemize}
+    \item Let's try create a multiverse.
+    \item \textit{The population is to the sample what the sample is to the bootstrap sample.}
+  \end{itemize}
+  \vspace{8cm}
+}
+
+\frame{
+  \frametitle{What's going on}
+  In a perfect multiverse,
+  \begin{itemize}
+    \item We generate samples from the original population many times.
+    \item Each dataset of samples we generate are independent.
+  \end{itemize}
+
+  In a bootstrap-multiverse,
+  \begin{itemize}
+    \item We generate \textit{bootstrap samples} from the sample many times.
+    \item Each \textit{bootstrap sample} are sampled \red{with replacement} and has the \red{same size} as the original sample. 
+  \end{itemize}
+}
+
+\frame{
+  \frametitle{Formal definition}
+  Bootstrap on a dataset $Z$ of size $n$
+  \begin{itemize}
+     \item Randomly select $n$ observations in $Z$ with replacement, call it $Z^{*1}$.
+     \item Do analysis and calculate the estimator of interest $\theta^{*1}$.
+     \item Repeat these two steps $B$ times, for some large $B$, and obtain
+        \begin{itemize}
+          \item bootstrap datasets: $Z^{*1}$, $Z^{*2}$, ..., $Z^{*B}$.
+          \item bootstrap estimates:  $\theta^{*1}$, $\theta^{*2}$, ..., $\theta^{*B}$
+        \end{itemize}
+      \item Bootstrap mean:
+      \[
+        Mean_B(\hat\theta)  = \frac{1}{B}\sum_r^B \hat\theta^{*r}
+      \]
+      \item Bootstrap standard error:  
+      \[
+        SE_B(\hat\theta) = \sqrt{\frac{1}{B-1} \sum_r^B (\hat\theta^{*r} - Mean_B(\hat\theta))^2}
+      \]
+   \end{itemize} 
+}
+
+\begin{frame}[fragile]
+\frametitle{Example}
+  \scriptsize
+<<boot1>>=
+library(ISLR)
+library(boot)
+boot.fn=function(data,index){
+  return(coef(lm(mpg~horsepower, data=data, subset=index)))
+}
+boot.fn(Auto ,1:392)
+summary(lm(mpg~horsepower, data=Auto))$coef
+@
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Example}
+  \scriptsize
+<<boot2>>=
+boot.fn(Auto,sample(392,392,replace=T))
+
+boot.fn(Auto,sample(392,392,replace=T))
+@
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Example}
+  \scriptsize
+<<boot3>>=
+boot(Auto, boot.fn, 1000)
+
+summary(lm(mpg~horsepower, data=Auto))$coef
+@
+\end{frame}
+\frame{
+  \frametitle{More in general}
+  \begin{itemize}
+    \item In complex data situations, figuring out the appropriate way to generate bootstrap samples is not trivial.
+    \item For example, for time series data, simply resample observations is a bad idea.
+  \end{itemize}
+  \vspace{4cm}
+}
+
+\frame{
+  \frametitle{How bootstrap is used in practice}
+  \begin{itemize}
+    \item Bootstrap standard error is the most common.
+    \item Can be used to estimate confidence intervals: \textit{Bootstrap Percentile} confidence interval.
+    \item Can be used to estimate prediction error...  
+        \begin{itemize}
+          \item Difficult to use in practice, \textit{why?}
+          \item \textit{So, sticking to cross-validation is easier!}
+        \end{itemize}
+  \end{itemize}
+}
+
+%================================================================%
+\section{Chapter 6}
+\stepcounter{subsection}
+\frame{
+  \frametitle{}
+  \centering
+  \Large
+  Chapter 6: Model selection
+}
+\frame{
+  \frametitle{Overview}
+  Why we are still studying linear regression 4 weeks in?
+  \begin{itemize}
+    \item Simple but easy to interpret.
+    \item Often good predictive performance.
+  \end{itemize}
+
+  But we can do something \textit{alternative} to OLS.
+}
+
+\frame{
+  \frametitle{Overview: Feature selection}
+  Why?
+  \begin{itemize}
+    \item \red{Prediction accuracy}: especially when $p > n$.
+    \item \red{Interpretability}: removing extra irrelevant features automatically.
+  \end{itemize}
+}
+
+\frame{
+  \frametitle{Three classes of methods}
+  \begin{itemize}
+    \item \textbf{Subset selection} (Today)
+    \item \textbf{Shrinkage}
+    \item \textbf{Dimension reduction}
+  \end{itemize}
+
+  Notice: all these methods can be extended outside of linear regression, e.g., logistic regression, etc.
+}
+\frame{
+  \frametitle{Best subset selection}
+  \includegraphics[width = \textwidth]{figure/best_subset.png} 
+}
+\frame{
+  \frametitle{Best subset selection}
+    \includegraphics[width = \textwidth]{figure/best_subset2.png} 
+}
+
+\frame{
+  \frametitle{Forward selection}
+  \includegraphics[width=  \textwidth]{figure/forward.png} 
+}
+\frame{
+  \frametitle{Backward selection}
+    \includegraphics[width =  \textwidth]{figure/backward.png} 
+}
+
+\frame{
+  \frametitle{Comparisons}
+  \begin{itemize}
+    \item Best subset selection need to evaluate $2^p$ models.
+    \item Step-wise selection evaluates $1 + p(p+1)/2$ models.
+    \item Backward selection can only be applied if $n > p$.
+    \item \textit{Next we talk about criterion of model comparison}.
+  \end{itemize}
+}
+\frame{
+  \frametitle{Choosing optimal model}
+  \begin{itemize}
+    \item How to compare test error rate when there's no test data.
+    \item A few approaches to approximate using training error
+      \begin{itemize}
+        \item Mallow's C, $C_p$
+        \item Akaike information criterion (AIC)
+        \item Bayesian information criterion (BIC)
+        \item Adjusted $R^2$
+      \end{itemize}
+  \end{itemize}
+}
+
+\frame{
+  \frametitle{$C_p$}
+  \begin{itemize}
+    \item $d$: number of parameters
+    \item Mallow's $C_p$:
+    \[
+        C_p = \frac{1}{n}(RSS + 2d\hat\sigma^2)
+    \]
+  \end{itemize}
+  \vspace{3cm}
+}
+\frame{
+  \frametitle{$AIC$}
+  \begin{itemize}
+    \item Mallow's $C_p$:
+    \[
+        C_p = \frac{1}{n}(RSS + 2d\hat\sigma^2)
+    \]
+    \item Akaike information criterion (AIC) is defined as
+    \[
+      AIC = -2\log L + 2d
+    \]
+    \item Equivalent to $C_p$ in linear models (not in other models!)
+  \end{itemize}
+}
+\frame{
+  \frametitle{$BIC$}
+  \begin{itemize}
+  \item Bayesian information criterion (BIC) is defined as
+    \[
+      BIC = \frac{1}{n}(RSS + \log(n)d\hat\sigma^2)
+    \]
+      \item For $C_p$, AIC and BIC, we want small values!
+
+  \end{itemize}
+  \vspace{3cm}
+}
+
+\frame{
+  \frametitle{Adjusted $R^2$}
+    \[
+      \mbox{Adjusted} R^2 = 1 - \frac{RSS / (n - d - 1)}{TSS / (n - 1)} 
+    \]
+
+  \begin{itemize}
+  \item We want adjusted $R^2$ to be large.
+  \item It does not need $\hat\sigma^2$, so it can be used for $p > n$!
+  \item However, difficult to generalize to other models.
+  \end{itemize}  
+  \vspace{2cm}
+}
+\frame{
+  \frametitle{Final thoughts}
+  \begin{itemize}
+    \item Remember when we first talk about estimating test error, we can do cross-validation.
+    \item Cross-validation has advantage since it directly estimate test error.
+    \item It does not need to estimate $\sigma^2$, which can be difficult to calculate. 
+    \item Also model size $d$ is not trivial in many settings. \textit{Seems silly?}
+  \end{itemize}
+}
+\frame{
+\frametitle{A final final thought}
+One-standard error rule
+\vspace{5cm}
+}
+
+%================================================================%
+\section{Examples of model selection}
+\stepcounter{subsection}
+\begin{frame}[fragile]
+\frametitle{Predict baseball player's salary}
+  \scriptsize
+<<>>=
+library(ISLR)
+data(Hitters)
+names(Hitters)
+@
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Best subset regression}
+  \scriptsize
+<<select1>>=
+library(leaps)
+regfit=regsubsets(Salary~.,Hitters)
+summary(regfit)$outmat
+@
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Best subset regression}
+  \scriptsize
+<<select2, out.width = ".9\\textwidth", fig.width = 10, fig.height = 5>>=
+regfit.full=regsubsets(Salary~.,Hitters, nvmax = 19)
+reg.summary=summary(regfit.full)
+par(mfrow=c(1,2))
+plot(reg.summary$rss ,xlab="Number of Variables ",ylab="RSS", type="l")
+plot(reg.summary$adjr2 ,xlab="Number of Variables ", ylab="Adjusted RSq",type="l")
+k=which.max(reg.summary$adjr2)
+points(k,reg.summary$adjr2[k], col="red",cex=2,pch=20)
+@
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Best subset regression}
+  \scriptsize
+<<select3, out.width = ".9\\textwidth", fig.width = 10, fig.height = 5>>=
+par(mfrow=c(1,2))
+plot(reg.summary$cp ,xlab="Number of Variables ",ylab="Cp", type="l")
+k=which.min(reg.summary$cp)
+points(k,reg.summary$cp[k], col="red",cex=2,pch=20)
+plot(reg.summary$bic ,xlab="Number of Variables ", ylab="BIC",type="l")
+k=which.min(reg.summary$bic)
+points(k,reg.summary$bic[k], col="red",cex=2,pch=20)
+@
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Best subset regression}
+  \scriptsize
+<<select4, out.width = ".6\\textwidth", fig.width = 10, fig.height = 10>>=
+par(mfrow=c(2,2))
+plot(regfit.full,scale="r2")
+plot(regfit.full,scale="adjr2")
+plot(regfit.full,scale="Cp")
+plot(regfit.full,scale="bic")
+@
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Forward selection}
+  \scriptsize
+<<select5>>=
+regfit.fwd=regsubsets(Salary ~ ., data=Hitters, nvmax=8, method = "forward")
+summary(regfit.fwd)$outmat
+@
+\end{frame}
+ 
+
+\begin{frame}[fragile]
+\frametitle{Backward selection}
+  \scriptsize
+<<select6>>=
+regfit.bwd=regsubsets(Salary ~ ., data=Hitters, nvmax=8, method = "backward") 
+summary(regfit.bwd)$outmat
+@
+\normalsize
+\textit{Why not the same as the previous case?}
+\end{frame}
+
+\frame{
+  \frametitle{What's next? A preview of some fancy stuff to come}
+  \includegraphics[width = \textwidth]{figure/future.png}
+
+}
+
+
+
+% %================================================================%
+% \section{Interesting topics in Re-sampling methods}
+% \stepcounter{subsection}
+
+% \frame{
+%   \frametitle{Case study: Cross-validation}
+%   Consider a classification scenario
+%   \begin{itemize}
+%     \item Starting with 5000 predictors and 50 samples, find the 100 predictors having the largest correlation with the class labels.
+%     \item We then apply a classifier such as logistic regression, using only these 100 predictors, \red{and apply cross-validation in this step to select a model}.
+%   \end{itemize}
+
+%   Is it good science?
+% }
+
+% \frame{
+%   \frametitle{No!}
+%   \begin{itemize}
+%     \item The procedure has already seen the labels of the training data in the first step. 
+%     \item Why does it matter?
+%   \end{itemize}
+% }
+
+% \frame{
+%   \frametitle{Simulation}
+% }
+
+
+
+
+
+
+\end{document}

@@ -1,0 +1,450 @@
+\documentclass[usenames,dvipsnames,10pt,compress, handout]{beamer}\usepackage[]{graphicx}\usepackage[]{color}
+%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+\let\hlipl\hlkwb
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt} 
+\let\Tiny=\tiny
+\usepackage{eqnarray,amsmath}
+% \usepackage{wasysym}
+\usepackage{mathtools}
+\usepackage{multirow}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{multirow}
+% \usepackage{bigstrut}
+\usepackage{graphicx}
+\usepackage[round]{natbib}
+\usepackage{bm}
+
+\setbeamertemplate{navigation symbols}{}    
+\setbeamertemplate{footline}[frame number]{}
+\usepackage{soul}
+\usetheme{Singapore}
+
+%Misc Commands
+\newcommand{\mbf}{\mathbf}
+\newcommand{\lexp}{$\overset{\mbox{\tiny 0}}{e}$}
+\newenvironment{wideitemize}{\itemize\addtolength{\itemsep}{5pt}}{\enditemize}
+
+
+\newcommand{\bx}{{\bm x}}
+\newcommand{\bX}{{\bm X}}
+\newcommand{\by}{{\bm y}}
+\newcommand{\bY}{{\bm Y}}
+\newcommand{\bW}{{\bm W}}
+\newcommand{\bG}{{\bm G}}
+\newcommand{\bR}{{\bm R}}
+\newcommand{\bZ}{{\bm Z}}
+\newcommand{\bV}{{\bm V}}
+\newcommand{\bL}{{\bm L}}
+\newcommand{\bz}{{\bm z}}
+\newcommand{\be}{{\bm e}}
+\newcommand{\bgamma}{{\bm \gamma}}
+\newcommand{\bbeta}{{\bm \beta}}
+\newcommand{\balpha}{{\bm \alpha}}
+\newcommand{\bSigma}{{\bm \Sigma}}
+\newcommand{\bmu}{{\bm \mu}}
+\newcommand{\btheta}{{\bm \theta}}
+\newcommand{\bepsilon}{{\bm \epsilon}}
+\newcommand{\bone}{{\bm 1}}
+\newcommand{\bzero}{{\bm 0}}
+\newcommand{\bC}{{\bm C}}
+\newcommand{\bI}{{\bm I}}
+\newcommand{\bA}{{\bm A}}
+\newcommand{\bB}{{\bm B}}
+\newcommand{\bQ}{{\bm Q}}
+\newcommand{\bS}{{\bm S}}
+\newcommand{\bD}{{\bm D}}
+\newcommand{\cQ}{\mathcal{Q}}
+\newcommand{\cU}{\mathcal{U}}
+\newcommand{\cI}{\mathcal{I}}
+\newcommand{\cL}{\mathcal{L}}
+\newcommand{\orange}{\textcolor{Orange}}
+\newcommand{\green}{\textcolor{green}}
+\newcommand{\blue}{\textcolor{blue}}
+\newcommand{\red}{\textcolor{red}}
+\newcommand{\purple}{\textcolor{purple}}
+\newcommand{\gray}{\textcolor{gray}}
+\newcommand{\ok}{\nonumber}
+
+% Adjust vertical spacing in lists
+\makeatletter
+\def\@listi{\leftmargin\leftmargini
+            \topsep     8\p@ \@plus2\p@ \@minus2.5\p@
+            \parsep     0\p@
+            \itemsep  5\p@ \@plus2\p@ \@minus3\p@}
+\let\@listI\@listi
+\def\@listii{\leftmargin\leftmarginii
+              \topsep    6\p@ \@plus1\p@ \@minus2\p@
+              \parsep    0\p@ \@plus\p@
+              \itemsep  3\p@ \@plus2\p@ \@minus3\p@}
+\def\@listiii{\leftmargin\leftmarginiii
+              \topsep    3\p@ \@plus1\p@ \@minus2\p@
+              \parsep    0\p@ \@plus\p@
+              \itemsep  2\p@ \@plus2\p@ \@minus3\p@}
+\makeatother
+% Dealing with fraile envrionment of beamer with codes
+\newenvironment{xframe}[2][]
+  {\begin{frame}[fragile,environment=xframe,#1]
+  \frametitle{#2}}
+  {\end{frame}}
+
+
+
+
+\title{Stat 435 Intro to Statistical Machine Learning}
+\subtitle{Week 2: PCA and other non-linear methods}
+
+\author[]{Richard Li}
+\date{\today}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+\maketitle
+%================================================================%
+\section{PCA}
+\stepcounter{subsection}
+\frame{
+  \frametitle{Motivation of PCA}
+  \centering
+  \includegraphics[width = 1\textwidth]{figure/PCA0.png}
+}
+
+\frame{
+\frametitle{Geometric view of PCA}
+ If we think of PCA as maximizing variances,\vspace{.5cm}
+
+ PCA \textbf{rotates} the data set so as to align the directions in which it is spread out the most with the principal axes.
+
+ \vspace{1cm}
+
+ \textit{Remember in your previous HW, you found it difficult to visualize your classifier when there are more than two predictors, and you scratched your head trying to find two predictors that give you the best visual separation \st{(or you just randomly plotted something)}.}
+
+ \vspace{1cm}
+ A nice 3D visualization of the rotation: \url{http://setosa.io/ev/principal-component-analysis/}
+}
+
+\frame{
+  \frametitle{Connection of the two views of PCA}
+}
+
+\frame{
+  \frametitle{Alternative view of PCA}
+  (10.2.2 of ISLR) If we think of PCA as minimizing residuals, \\
+  \centering
+  \includegraphics[width = 1\textwidth]{figure/PCA1.png}
+}
+\frame{
+  \frametitle{Alternative view of PCA}
+  {\centering
+  \includegraphics[width = 1\textwidth]{figure/PCA3.png}
+  }
+
+  This sequence matrices explain less and less variation in the data.\\
+  \red{What happens when there are $p$ of them? Try the codes in 10.4 of ISLR, see if it is true.}
+}
+
+\begin{frame}[fragile]
+  \frametitle{PCA using R}
+  \scriptsize
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{library}\hlstd{(ISLR)}
+\hlkwd{data}\hlstd{(College)}
+\hlkwd{dim}\hlstd{(College)}
+\end{alltt}
+\begin{verbatim}
+## [1] 777  18
+\end{verbatim}
+\begin{alltt}
+\hlstd{College[,} \hlnum{1}\hlstd{]} \hlkwb{<-} \hlkwd{as.numeric}\hlstd{(College[,} \hlnum{1}\hlstd{]} \hlopt{==} \hlstr{"Yes"}\hlstd{)}
+\hlstd{fit} \hlkwb{<-} \hlkwd{princomp}\hlstd{(College)}
+\hlkwd{plot}\hlstd{(fit)}
+\end{alltt}
+\end{kframe}
+
+{\centering \includegraphics[width=.5\linewidth]{figure/pca-1-1} 
+
+}
+
+
+
+\end{knitrout}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Confirm the reconstruction}
+  \scriptsize
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{dim}\hlstd{(fit}\hlopt{$}\hlstd{loading)}
+\end{alltt}
+\begin{verbatim}
+## [1] 18 18
+\end{verbatim}
+\begin{alltt}
+\hlkwd{dim}\hlstd{(fit}\hlopt{$}\hlstd{scores)}
+\end{alltt}
+\begin{verbatim}
+## [1] 777  18
+\end{verbatim}
+\begin{alltt}
+\hlstd{College.center} \hlkwb{<-} \hlkwd{as.matrix}\hlstd{(College)}
+\hlstd{College.center} \hlkwb{<-} \hlkwd{apply}\hlstd{(College.center,} \hlnum{2}\hlstd{,} \hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)\{x} \hlopt{-} \hlkwd{mean}\hlstd{(x)\})}
+\hlstd{transform} \hlkwb{<-} \hlstd{College.center} \hlopt{%*%} \hlstd{fit}\hlopt{$}\hlstd{loading}
+\hlkwd{mean}\hlstd{(}\hlkwd{abs}\hlstd{(fit}\hlopt{$}\hlstd{scores} \hlopt{-} \hlstd{transform))}
+\end{alltt}
+\begin{verbatim}
+## [1] 1.052119e-14
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Illustration of the reconstruction}
+  \scriptsize
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{Z1} \hlkwb{<-} \hlstd{fit}\hlopt{$}\hlstd{scores[,} \hlnum{1}\hlstd{]}
+\hlstd{approx1} \hlkwb{<-} \hlstd{Z1} \hlopt{%*%} \hlkwd{t}\hlstd{(fit}\hlopt{$}\hlstd{loading[,} \hlnum{1}\hlstd{])}
+\hlkwd{mean}\hlstd{(}\hlkwd{abs}\hlstd{(approx1} \hlopt{-} \hlstd{College.center))}
+\end{alltt}
+\begin{verbatim}
+## [1] 627.799
+\end{verbatim}
+\begin{alltt}
+\hlkwd{plot}\hlstd{(approx1, College.center)}
+\hlkwd{abline}\hlstd{(}\hlnum{0}\hlstd{,} \hlnum{1}\hlstd{,} \hlkwc{col}\hlstd{=}\hlstr{"red"}\hlstd{)}
+\end{alltt}
+\end{kframe}
+
+{\centering \includegraphics[width=.5\linewidth]{figure/pca-3-1} 
+
+}
+
+
+
+\end{knitrout}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Illustration of the reconstruction}
+  \scriptsize
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{Z2} \hlkwb{<-} \hlstd{fit}\hlopt{$}\hlstd{scores[,} \hlnum{1}\hlopt{:}\hlnum{2}\hlstd{]}
+\hlstd{approx2} \hlkwb{<-} \hlstd{Z2} \hlopt{%*%} \hlkwd{t}\hlstd{(fit}\hlopt{$}\hlstd{loading[,} \hlnum{1}\hlopt{:}\hlnum{2}\hlstd{])}
+\hlkwd{mean}\hlstd{(}\hlkwd{abs}\hlstd{(approx2} \hlopt{-} \hlstd{College.center))}
+\end{alltt}
+\begin{verbatim}
+## [1] 343.3329
+\end{verbatim}
+\begin{alltt}
+\hlkwd{plot}\hlstd{(approx2, College.center)}
+\hlkwd{abline}\hlstd{(}\hlnum{0}\hlstd{,} \hlnum{1}\hlstd{,} \hlkwc{col}\hlstd{=}\hlstr{"red"}\hlstd{)}
+\end{alltt}
+\end{kframe}
+
+{\centering \includegraphics[width=.5\linewidth]{figure/pca-4-1} 
+
+}
+
+
+
+\end{knitrout}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Illustration of the reconstruction}
+  \scriptsize
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{Z18} \hlkwb{<-} \hlstd{fit}\hlopt{$}\hlstd{scores[,} \hlnum{1}\hlopt{:}\hlnum{18}\hlstd{]}
+\hlstd{approx18} \hlkwb{<-} \hlstd{Z18} \hlopt{%*%} \hlkwd{t}\hlstd{(fit}\hlopt{$}\hlstd{loading[,} \hlnum{1}\hlopt{:}\hlnum{18}\hlstd{])}
+\hlkwd{mean}\hlstd{(}\hlkwd{abs}\hlstd{(approx18} \hlopt{-} \hlstd{College.center))}
+\end{alltt}
+\begin{verbatim}
+## [1] 2.469838e-12
+\end{verbatim}
+\begin{alltt}
+\hlkwd{plot}\hlstd{(approx18, College.center)}
+\hlkwd{abline}\hlstd{(}\hlnum{0}\hlstd{,} \hlnum{1}\hlstd{,} \hlkwc{col}\hlstd{=}\hlstr{"red"}\hlstd{)}
+\end{alltt}
+\end{kframe}
+
+{\centering \includegraphics[width=.5\linewidth]{figure/pca-5-1} 
+
+}
+
+
+
+\end{knitrout}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Principle component regression}
+  \scriptsize
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{library}\hlstd{(pls)}
+\hlstd{Y} \hlkwb{<-} \hlnum{2} \hlopt{+} \hlstd{College.center} \hlopt{%*%} \hlkwd{rnorm}\hlstd{(}\hlnum{18}\hlstd{)}
+\hlstd{fit.pcr} \hlkwb{<-} \hlkwd{pcr}\hlstd{(Y} \hlopt{~} \hlstd{College.center,} \hlkwc{validation} \hlstd{=}\hlstr{"CV"}\hlstd{)}
+\hlkwd{validationplot}\hlstd{(fit.pcr,}\hlkwc{val.type}\hlstd{=}\hlstr{"MSEP"}\hlstd{)}
+\hlstd{pred.pcr} \hlkwb{<-} \hlkwd{predict}\hlstd{(fit.pcr, College.center,} \hlkwc{ncomp} \hlstd{=} \hlnum{2}\hlstd{)}
+\end{alltt}
+\end{kframe}
+
+{\centering \includegraphics[width=.5\linewidth]{figure/pcr-1} 
+
+}
+
+
+
+\end{knitrout}
+\end{frame}
+
+
+\begin{frame}[fragile]
+  \frametitle{Principle component regression by hand}
+  \scriptsize
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# reproduce this with PCA}
+\hlstd{Z2} \hlkwb{<-} \hlstd{College.center} \hlopt{%*%} \hlstd{fit}\hlopt{$}\hlstd{loading[,} \hlnum{1}\hlopt{:}\hlnum{2}\hlstd{]}
+\hlstd{fit.byhand} \hlkwb{<-} \hlkwd{lm}\hlstd{(Y} \hlopt{~} \hlstd{Z2)}
+\hlstd{pred.byhand} \hlkwb{<-} \hlkwd{cbind}\hlstd{(}\hlnum{1}\hlstd{, Z2)} \hlopt{%*%} \hlkwd{coef}\hlstd{(fit.byhand)}
+\hlkwd{plot}\hlstd{(pred.pcr, pred.byhand)}
+\end{alltt}
+\end{kframe}
+
+{\centering \includegraphics[width=.5\linewidth]{figure/pcr-2-1} 
+
+}
+
+
+
+\end{knitrout}
+\end{frame}
+
+
+%================================================================%
+\section{Regression with correlated predictors}
+\stepcounter{subsection}
+\frame{
+  \frametitle{Regression with correlated predictors}
+
+  It is well-known that ridge regression tends to give similar coefficient values to correlated variables, whereas the lasso may give quite different coefficient values to correlated variables. We will now explore this property in a very simple setting.
+  
+  \vspace{.5cm}
+  Suppose $n = p = 2$, $x_{11} = x_{12}$, $x_{21} = x_{22}$, and both predictors and the response are centered to $0$, so we do not have to estimate the intercept.
+  
+  \vspace{1.5cm}
+  (a) Write out the ridge regression optimization problem in this setting.
+
+  }
+
+\frame{
+  \frametitle{Regression with correlated predictors}
+    Argue that in this setting, the ridge coefficient estimates satisfy $\hat\beta_1 = \hat\beta_2$
+   \vspace{4cm}
+   
+ 
+  }
+\frame{
+\frametitle{Regression with correlated predictors}
+
+}
+\frame{
+  \frametitle{Regression with correlated predictors}
+    Argue that in this setting, the lasso coefficient estimates are not unique
+   \vspace{5cm}
+  }   
+\frame{
+  \frametitle{Regression with correlated predictors}
+    
+  }   
+
+
+%================================================================%
+\section{Nonlinear methods}
+\frame{
+  \frametitle{Summary of basis function approaches}
+  \begin{itemize}
+    \item Polynomial regression
+    \vspace{.5cm}
+    \item Step function
+    \vspace{.5cm}
+    \item Regression spline
+    \begin{itemize}
+         \item Piecewise polynomial
+             \vspace{.5cm}
+
+         \item Cubic spline
+             \vspace{.5cm}
+
+         \item Natural cubic spline
+             \vspace{.5cm}
+
+      \end{itemize}   
+    \item Smoothing spline
+  \end{itemize}
+}
+\end{document}
+
+
+ 
+% \end{document}

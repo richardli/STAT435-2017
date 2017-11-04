@@ -1,0 +1,253 @@
+---
+title: "STAT435 Intro to Statistical Machine Learning"
+subtitle: "Week 1: Logistics, R, and R Markdown"
+author: "Richard Li"
+date:  "Mar 29"
+output:
+  slidy_presentation:
+    css: css/style.css
+    incremental: false
+  pdf_document:
+    highlight: pygments    
+    number_sections: false
+---
+
+
+```{r setup, include=FALSE}
+library(knitr)
+library(xtable)
+# set global chunk options
+opts_chunk$set(fig.path='figure/', fig.align='center', fig.show='hold')
+opts_chunk$set(warning=FALSE, message=FALSE, error=FALSE) 
+opts_chunk$set(tidy=FALSE)
+opts_chunk$set(cache=TRUE)
+options(formatR.arrow=TRUE, width=90)
+read_chunk('codes/week1.R')
+# 
+# pdf_document:
+#   highlight: pygments
+#   number_sections: true
+# slidy_presentation:
+#   highlight: pygments
+#   css: css/style.css
+#   incremental: false
+```
+
+# About me
+>- Zehang Li, go by Richard
+>- Office: PDL C-14G
+>		+ _Looking for a big metal door at LL level of PDL C wing_ 
+>- Office hour: Thursday 2:30 - 3:30
+>		+ _Remember homeworks are due on Fridays :)_
+
+# About the course  
+
+### Machine learning in a nutshell  
+- Understand data
+- Do statistics 
+- Write codes
+
+```{r, out.width = "350em", echo=FALSE, fig.caption=""}
+knitr::include_graphics("fun/draw_dog.png")
+```
+
+
+# _Week 1 quick pool_
+### Wednesday sessions
+>- Highlight/Review/Supplement lectures?
+>- R programming demo? 
+>- Additional exercise problems? 
+>- ~~Kayaking, Barbecue, Deriving homework problems~~
+
+
+# What we'll do today
+<div class="incremental">  
+###Introduction to R
+>- Haven't used R at all? 
+>		- Don't worry, it's just another programming language
+>- Haven't programmed at all? 
+>		- Don't worry, it's just a fancy calculator (sort of)
+
+###Documentation with R
+- R Markdown
+</div>
+
+# Start using R 
+<div class="incremental">  
+### R
+>+ a programming language and software environment for statistics
+>+ many packages to use for even very complicated models
+>+ Very easy setup with most OS environments (most of the time)  
+>+ Download: [https://cloud.r-project.org](https://cloud.r-project.org)
+
+### RStudio
+>+ Download: [http://www.rstudio.com/download](http://www.rstudio.com/download)
+>+ Using Rstudio is totally optional, but usually it makes life easier
+	+ Syntax highlighting
+	+ Nice organization of windows
+	+ Auto-saving codes when crashes
+	+ Much easier for R Markdown	
+
+### Try for yourself
+```{r, eval=FALSE, echo=TRUE}
+print("Hello, World!")
+```
+</div>
+# Basics
+>- Highlight codes in the editor window and click Run or hit Cntl-Enter (Command-Enter on a Mac) to run 
+>- Type lines in the console and press Enter
+>- Making sure the the lines you typed are finished
+>		+ If not, you will see a '+' in front of the line
+>		+ Finish the line or hit ESC to escape 
+>- Now, try calculating "8 + 24 + 23" and $\sqrt{2}$ in R
+>- Try look for help with functions using '?'  
+
+# Example from ISL
+>- Section 2.3 from ISL
+>		- Construct vectors, matrices, and draw random numbers
+>		- Basic scatter plot and contour plots
+>		- Load ans summarize data
+>- Section 3.6 from ISL
+>		- Simple linear regression
+>		- Multiple regression
+>- Section 4.6.5 from ISL
+>		- KNN (homework) 
+
+# Basic R codes
+#### Initialize and construct vectors
+```{r, Vectors_and_Matrices}
+```
+
+#### Generate Random numbers following normal distribution
+```{r, Random_Numbers}
+```
+
+#### Generate Random numbers following other distributions
+```{r, Random_Numbers_2}
+```
+
+#### Scatter plot
+```{r, Plot}
+```
+
+#### Customizing scatter plots
+```{r, Plot_2}
+```
+
+# Regression example
+#### Read data
+- The MASS library contains the Boston data set, which records _medv_ (median house value) for 506 neighborhoods around Boston. 
+- Predict _medv_ using 13 predictors such as 
+	- rm (average number of rooms per house), 
+	- age (average age of houses), 
+	- lstat (percent of households with low socioeconomic status).
+```{r, Regression_1}
+```
+#### Regression
+- You should have seen this before
+```{r, Regression_2}
+```
+
+#### Diagnostics
+- How about confidence intervals for the regression coefficients
+```{r, Regression_3}
+```
+- Visual check of 
+	- residual against fitted values 
+	- QQ plot of residuals
+- _Why do we want to see these plots?_
+```{r, Regression_4}
+```
+
+#### More regressors
+```{r, Regression_5}
+```
+- _Read more in book!_
+
+# Trick of R programming
+</br>
+</br>
+</br>
+</br>
+<center> <h2>Practice! </h2> </center>
+
+# Fun stuff, finally, what we are all here for :)
+```{r, Fun, eval=FALSE}
+```
+Try on your laptop :) Then we'll talk some serious business.
+
+# R Markdown
+> - Reporting tool to combine everything together
+>		- code
+> 		- result
+> 		- comment/discussion
+> - Easy to get started with RStudio
+> - Good for Homework
+> 		- Not required though, MS Word is perfectly accept as long as it is clear and readable 
+
+
+
+# R Markdown Demo
+>- Choose File > New File > R Markdown…
+>- Make sure HTML output is selected and click OK
+>- Save the file somewhere, call it demo.Rmd
+>- Click the Knit HTML button
+>- Find the HTML file and open in browser
+
+# R Markdown Demo
+>- _Saving a PDF file is tricky_
+>- You will need to install TEX on your computer
+>		- [https://www.latex-project.org/get/](https://www.latex-project.org/get/)
+>- An Alternative way is to print your HTML file to PDF
+>- _For HW submission_, HTML file is enough. But to be absolutely safe, upload both HTML file and RMD file.
+
+# R Markdown Syntax
+- Header block
+- **bold**: `**bold**`
+- italic: `*italic*` or `_italic_`
+- Header: `# Header`
+- Subheader: `## Subheader`
+- Subsubheader: `### Subsubheader`
+- Code chunks:  
+ 
+
+		```{r}`r ''`
+		x <- 1:10
+		y <- 2:11
+		plot(x, y)
+		```
+
+# R Markdown for Homework
+
+### Check out the Homework template on canvas!
+```{r, out.width = "600em", echo=FALSE, fig.caption=""}
+knitr::include_graphics("fun/template.png")
+```
+
+# More logistics, class Resources
+### _Office hours or email me to schedule a time_
+### _Canvas discussion board_
+- Phrase your question so that other people can answer
+- Give codes that other people can run _and replicate your problem_
+
+#### Bad examples
+
+1. I ran the regression codes but it didn't work
+2. I have ``lm(y ~ x)" in my codes but it didn't work
+
+#### Good example
+I tried the following codes and the error message says: variable lengths differ (found for 'x')
+```{r, eval=FALSE, echo=TRUE}
+x <- seq(1:10)
+y <- seq(1:100)
+model <- lm(y ~ x)
+```
+
+# External Resources
+- [R for Data Science book](http://r4ds.had.co.nz/)
+	+ Everything about R with no stones unturned
+- [Lecture materials from CSSS 508: Introduction to R for Social Scientists](https://rebeccaferrell.github.io/CSSS508/)
+	+ Advanced materials on data structure, fancy plots, etc.
+- _Stack Overflow!_
+
+# Questions?

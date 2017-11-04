@@ -1,0 +1,613 @@
+\documentclass[usenames,dvipsnames,10pt,compress, final, handout]{beamer}\usepackage[]{graphicx}\usepackage[]{color}
+%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+\let\hlipl\hlkwb
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt} 
+\let\Tiny=\tiny
+\usepackage{eqnarray,amsmath}
+% \usepackage{wasysym}
+\usepackage{mathtools}
+\usepackage{multirow}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{multirow}
+% \usepackage{bigstrut}
+\usepackage{graphicx}
+\usepackage[round]{natbib}
+\usepackage{bm}
+\usepackage{tikzsymbols}
+
+\setbeamertemplate{navigation symbols}{}    
+\setbeamertemplate{footline}[frame number]{}
+\usepackage{soul}
+\usetheme{Singapore}
+
+%Misc Commands
+\newcommand{\mbf}{\mathbf}
+\newcommand{\lexp}{$\overset{\mbox{\tiny 0}}{e}$}
+\newenvironment{wideitemize}{\itemize\addtolength{\itemsep}{5pt}}{\enditemize}
+
+
+\newcommand{\bx}{{\bm x}}
+\newcommand{\bX}{{\bm X}}
+\newcommand{\by}{{\bm y}}
+\newcommand{\bY}{{\bm Y}}
+\newcommand{\bW}{{\bm W}}
+\newcommand{\bG}{{\bm G}}
+\newcommand{\bR}{{\bm R}}
+\newcommand{\bZ}{{\bm Z}}
+\newcommand{\bV}{{\bm V}}
+\newcommand{\bL}{{\bm L}}
+\newcommand{\bz}{{\bm z}}
+\newcommand{\be}{{\bm e}}
+\newcommand{\bgamma}{{\bm \gamma}}
+\newcommand{\bbeta}{{\bm \beta}}
+\newcommand{\balpha}{{\bm \alpha}}
+\newcommand{\bSigma}{{\bm \Sigma}}
+\newcommand{\bmu}{{\bm \mu}}
+\newcommand{\btheta}{{\bm \theta}}
+\newcommand{\bepsilon}{{\bm \epsilon}}
+\newcommand{\bone}{{\bm 1}}
+\newcommand{\bzero}{{\bm 0}}
+\newcommand{\bC}{{\bm C}}
+\newcommand{\bI}{{\bm I}}
+\newcommand{\bA}{{\bm A}}
+\newcommand{\bB}{{\bm B}}
+\newcommand{\bQ}{{\bm Q}}
+\newcommand{\bS}{{\bm S}}
+\newcommand{\bD}{{\bm D}}
+\newcommand{\cQ}{\mathcal{Q}}
+\newcommand{\cU}{\mathcal{U}}
+\newcommand{\cI}{\mathcal{I}}
+\newcommand{\cL}{\mathcal{L}}
+\newcommand{\orange}{\textcolor{Orange}}
+\newcommand{\green}{\textcolor{green}}
+\newcommand{\blue}{\textcolor{blue}}
+\newcommand{\red}{\textcolor{red}}
+\newcommand{\purple}{\textcolor{purple}}
+\newcommand{\gray}{\textcolor{gray}}
+\newcommand{\ok}{\nonumber}
+
+% Adjust vertical spacing in lists
+\makeatletter
+\def\@listi{\leftmargin\leftmargini
+            \topsep 		8\p@ \@plus2\p@ \@minus2.5\p@
+            \parsep 		0\p@
+            \itemsep	5\p@ \@plus2\p@ \@minus3\p@}
+\let\@listI\@listi
+\def\@listii{\leftmargin\leftmarginii
+              \topsep    6\p@ \@plus1\p@ \@minus2\p@
+              \parsep    0\p@ \@plus\p@
+              \itemsep  3\p@ \@plus2\p@ \@minus3\p@}
+\def\@listiii{\leftmargin\leftmarginiii
+              \topsep    3\p@ \@plus1\p@ \@minus2\p@
+              \parsep    0\p@ \@plus\p@
+              \itemsep  2\p@ \@plus2\p@ \@minus3\p@}
+\makeatother
+% Dealing with fraile envrionment of beamer with codes
+\newenvironment{xframe}[2][]
+  {\begin{frame}[fragile,environment=xframe,#1]
+  \frametitle{#2}}
+  {\end{frame}}
+
+
+% trick to make all itemize pause
+% \usepackage{letltxmacro}
+% \LetLtxMacro\olditemize\itemize
+
+
+\title{Stat 435 Intro to Statistical Machine Learning}
+\subtitle{Week 3: Homework 1, Probability, Bayes rule, etc.}
+
+\author[]{Richard Li}
+\date{\today}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+% \renewcommand{\itemize}[1][<+(1)->]{\olditemize[#1]}
+
+\maketitle
+%================================================================%
+\section{Homework review}
+\stepcounter{subsection}
+\frame{
+  \frametitle{Plan for today}
+  \begin{itemize}[<+->]
+    \item Recap of Homework 1
+    \item Bayes error rate
+          \begin{itemize}[<+->]
+            \item Definition
+            \item Simple examples
+            \item Bayes rule
+            \item Difficult examples 
+            \end{itemize}
+     
+  \end{itemize}
+}
+
+\frame{
+  \frametitle{All but Bayes error rate}
+  Logistics:
+  \begin{itemize}[<+->]
+    \item In the future, \textbf{don't submit \textit{only}} .Rmd file.
+    \item Don't forget to ``comment'' on your findings.
+  \end{itemize}
+  \pause
+  Some other problems:
+  \begin{itemize}[<+->]
+    \item 6(c): marginal association v.s. conditional association
+    \item 6(g): In R, \textit{which.min()} and \textit{which.max()} returns only the first result when tie exists. \red{I did not deduct points this time.}
+  \end{itemize}
+}
+
+\frame{
+  \frametitle{All but Bayes error rate}
+  \begin{itemize}[<+->]
+    \item Deterministic support (problem 2)
+        \begin{itemize}[<+->]
+          \item Does 1-NN overfit?
+          \item What if we have more training data?
+        \end{itemize}
+  \end{itemize}
+}
+
+%================================================================%
+\section{Bayes error rate}
+\stepcounter{subsection}
+\frame{
+  \frametitle{Bayes error rate: definition}
+   Textbook definition: 
+  \begin{itemize}[<+->]
+    \item Test error rate produced by the \textbf{Bayes classifier}.
+    \item \textbf{Bayes classifier}: always predict $Y$ to be the class with largest $Pr(Y|x)$.
+  \end{itemize}
+
+  For 2-class problem,
+    \begin{itemize}[<+->]
+      \item For any given $x$, if we can calculate $Pr(Y = 0|x)$ and $Pr(Y = 1|x)$, we always predict $Y$ to be the more likely class.
+      \item What's the risk of doing this? 
+            \begin{itemize}[<+->]
+              \item $Y$ could be from the less likely class!
+              \item For any given $x$, we expect the error to be \red{$1 - Pr(\mbox{Y form the most likely class} | x)$}.
+            \end{itemize}
+    \end{itemize}
+}
+\frame{
+  \frametitle{Bayes error rate: definition}
+  \begin{itemize}[<+->]
+    \item Bayes error rate:  \red{$1 - E(Pr(\mbox{Y form the most likely class} | x))$}.
+    \item The expectation is taken w.r.t. the probability of all possible $X$.
+    \item It only depends on how $X$ and $Y$ are generated.
+    \item It does \textbf{not} depend on training/testing data.
+    \item It is the theoretical lower bound of the \textit{expected error} of any classifier.
+    \item Does \textbf{not} guarantee to be lower than any error rates of any classifier \textbf{on any test dataset}.
+  \end{itemize}
+ }
+\frame{
+  \frametitle{Bayes error rate: HM problem 1 with more test data}
+  \centering
+  \includegraphics[width = .8\textwidth]{figure/knn.pdf}
+} 
+
+\frame{
+  % \frametitle{Bayes error rate review}
+  \centering
+  \includegraphics[width = \textwidth]{fun/nowthis.jpg}
+  \pause
+  \large
+
+  Let's look at a few Bayes error rate calculations.
+}
+
+%================================================================%
+\section{Simple Bayes error rate calculation}
+\stepcounter{subsection}
+\frame{ 
+  \frametitle{Bayes error rate: deterministic case}
+  In problem 2 of the Homework, 
+  \begin{itemize}[<+->]
+    \item What is $Pr(\mbox{Y form the most likely class} | x)$?
+    \item If given any $x$ there is \textbf{only one possible $Y$}, we won't make mistakes.
+    \item So Bayes error rate is $0$ in that problem.
+  \end{itemize}
+  In the more general case, 
+    \begin{itemize}[<+->]
+       \item $0 < Pr(\mbox{Y form the most likely class} | x) < 1$
+       \item How to calculate Bayes error rate?
+     \end{itemize} 
+}
+
+\frame{
+  \frametitle{Review: Probability density functions}
+    \begin{itemize}[<+->]
+      \item Discrete case
+        \[
+          f(x) = Pr (X = x)
+        \]
+      \item Continuous case
+        \[
+          f(x) = \lim_{\delta \rightarrow 0} \frac{Pr(x \leq X \leq x + \delta)}{\delta}   
+        \]    
+    \end{itemize}
+}
+
+\frame{
+  \frametitle{Review: Expectation and variance}
+   \begin{itemize}[<+->]
+   \item Discrete case
+        \[
+          E(x) = \sum_{x}xf(x) \;\;\;\; Var(x) = \sum_{x}(x - E(X))^2f(x)
+        \]
+      \item Continuous case
+        \[
+          E(x) = \int_{x}xf(x)dx \;\;\;\; Var(x) = \int_{x}(x - E(x))^2f(x)dx
+        \]    
+    \end{itemize}
+}
+
+\frame{
+  \frametitle{Bayes error rate: mathematical form}
+  \begin{itemize}[<+->]
+    \item Now, Recall Bayes error rate is the error from \textbf{Bayes classifier} 
+    \item Thus the formula,
+        \[
+          \mbox{Bayes error} = 1 - E({\max_j Pr(Y = j | x)})
+        \]
+    \item We can also write this as
+        \[
+          \mbox{Bayes error} = 1 - \int \blue{\max_j Pr(Y = j | x)} f(x) dx
+        \]  
+    \item Again for two-class problem, 
+         \[
+          \mbox{Bayes error} = 1 - \Big(\int_{\red{L_0}} \blue{Pr(Y = 0 | x)} f(x) dx + \int_{\red{L_1}} \blue{Pr(Y = 1 | x)} f(x) dx\Big)
+        \]  
+    \item $L_0 = \{x : Pr(Y = 0 | x) > 0.5\}$ and  $L_1 = \{x : Pr(Y = 1 | x) > 0.5\}$
+  \end{itemize}
+}
+
+\frame{
+  \frametitle{Bayes error rate: simple example}
+  \begin{itemize}[<+->]
+    \item Suppose the real data are generated such that
+        \[
+          X \sim Unif[-1, 1]
+        \]
+    \item the true labels ($0$ or $1$) of the data are generated such that   
+        \[
+        Pr(Y = 1 | X < 0) = 0.2 \;\;\;\;\; Pr(Y = 1 | X > 0) = 0.9
+        \]
+    \item How often do we expect to observe $Y=1$?
+        \begin{footnotesize}\begin{eqnarray}\ok 
+          Pr(Y = 1) &=& \int_{-1}^0Pr(Y = 1 | X < 0)f(x)dx +  \int_{0}^{1}Pr(Y = 1 | X > 0)f(x)dx  \\\ok
+          &=& Pr(Y = 1 | X < 0)\int_{-1}^0f(x)dx +  Pr(Y = 1 | X > 0)\int_{0}^{1}f(x)dx  \\\ok
+          &=& 0.2 \times 0.5 + 0.9 \times 0.5 = 0.55
+        \end{eqnarray}\end{footnotesize}
+    \item What is the Bayes error rate?
+        \begin{footnotesize}\begin{eqnarray}\ok
+          Pr(Y = 1) &=& \int_{-1}^0Pr(Y = 1 | X < 0)f(x)dx +  \int_{0}^{1}Pr(Y = 0 | X > 0)f(x)dx  \\\ok
+          &=& 0.2 \times 0.5  + (1 - 0.9) \times 0.5 = 0.15
+        \end{eqnarray}\end{footnotesize}
+
+  \end{itemize}
+}
+\frame{
+  \frametitle{Exercise}
+  \begin{itemize}[<+->]
+    \item What if we change the distribution of $X$ to $X \sim Unif[-10, 1]$?
+    \item What if we change the true labels to be
+        \[
+        Pr(Y = 1 | X < 0) = 0.9 \]
+        \[Pr(Y = 1 | 0 < X < 0.5) = 0.2\]
+        \[Pr(Y = 1 | 0.5 < X) = 0.8
+        \]
+    \item What if we change the true labels to be
+        \[
+        Pr(Y = \{0, 1, \mbox{re-accommodate}\} | X > 0) = \{0.5, 0.5, 0\}
+        \] 
+        \[
+        Pr(Y = \{0, 1, \mbox{re-accommodate}\} | X < 0) = \{0.3, 0.5, 0.2\}
+        \]
+  \end{itemize}
+}
+%================================================================%
+\section{Bayes rule}
+\stepcounter{subsection}
+\frame{
+  \frametitle{Review: Bayes rule}
+  \center
+  This calculation seems straight forward \Cooley[1.3], 
+
+  but why is the homework problem so difficult?
+
+  \pause
+  \vspace{2cm}
+  Because \red{$Pr(Y | X)$} is not given directly \Sey[1.5][green!60!white]
+}
+\frame{
+  \frametitle{Bayes rule}
+  \begin{itemize}[<+->]
+    \item A simple application of \textit{conditional probability}.
+    \[
+      P(B | A) = \frac{P(A|B) P(B)}{P(A)}
+    \]
+    \item In fact, this is something you will see extensively in Chap 4 (LDA).
+  \end{itemize}
+
+}
+
+\frame{
+  \frametitle{Bayes rule: example}
+  \begin{itemize}[<+->]
+    \item You have a (faulty) alarm at home, it goes off 
+    \begin{itemize}[<+->]
+      \item with probability $0.9$ if your home is burglarized;
+      \item with probability $0.05$ if your home is not burglarized...
+    \end{itemize}
+    \item Now, your friend calls you and says your alarm just went off!
+    \item What is the probability of your home being burglarized?      
+  \end{itemize}
+}
+
+\frame{
+  \frametitle{Bayes rule: example}
+  \begin{itemize}[<+->]
+    \item We can write $Pr(A|B = 1) = 0.9$, and $Pr(A|B = 0) = 0.05$.
+    \item We want to know $Pr(B = 1|A)$.
+    \item Use Bayes rule,
+        \[
+          Pr(B|A) = \frac{Pr(A|B)Pr(B)}{Pr(A)}
+        \]
+     \item Suppose you live in a neighborhood where $P(B = 1) = 0.2$,
+     \item Then
+     \[
+      Pr(B = 1 | A) = \frac{0.9 \times 0.2}{Pr(A)} \;\;\;
+      Pr(B = 0 | A) = \frac{0.05 \times 0.8}{Pr(A)}
+     \]   
+  \end{itemize}
+}
+
+\frame{
+  \frametitle{Bayes rule: example}
+  \begin{itemize}[<+->]
+    \item But we do not know $Pr(A)$ (at least not directly)!
+    \item However, since we know $Pr(B=0|A) + Pr(B=0|A) = 1$
+    \item \textit{We only need the relative proportion of the two} 
+     \[
+      Pr(B = 1 | A)\propto  0.9 \times 0.2 = 0.18 
+      \]\[
+      Pr(B = 0 | A)\propto  0.05 \times 0.8 = 0.04
+     \] 
+     \item To calculate exact numbers,
+    \[
+      Pr(B = 1 | A) = \frac{0.18}{0.18 + 0.04} \approx 0.82 
+     \]\[ 
+      Pr(B = 0 | A) = \frac{0.04}{0.18 + 0.04} \approx 0.18
+     \]  
+  \end{itemize}
+}
+
+
+%================================================================%
+\section{Bayes error rate: HW problem 1}
+\stepcounter{subsection}
+\frame{
+  \frametitle{Bayes error: Homework revisited}
+    \begin{itemize}[<+->]
+      \item What is the Bayes classifier here?
+      \item How to approximate the Bayes error (through simulation)?
+      \item How to actually calculate it?
+      \item Why my testing error beats the ``best'' classifier?
+    \end{itemize}
+  }
+
+\frame{
+  \frametitle{Bayes error: Homework revisited}
+  \blue{First, what is the Bayes classifier here?}
+  \begin{itemize}[<+->]
+    \item When you have an $x_0$, Bayes classifier will assign
+          \begin{itemize}[<+->]
+            \item the class with higher pdf, $f(x_0 | y)$;
+            \item the class whose center ($[0, 0]$ or $[1.5, 1.5]$) is closer to $x_0$;
+            \item the class with higher $Pr(y | x_0)$
+          \end{itemize}
+    \item Why are they equivalent? 
+    \item What assumptions we are making?      
+  \end{itemize}
+}
+
+
+\frame{
+  \frametitle{Bayes error: Homework revisited}
+  From the homework solutions on Canvas:
+
+  \vspace{1cm}
+
+  \includegraphics[width = \textwidth]{figure/bayesrule.png}
+}
+
+\frame{
+  \frametitle{Bayes error: Homework revisited}
+  \blue{How to get $1 - E(max_j Pr(Y = j | x))$ without doing calculus?}
+  \includegraphics[width = \textwidth]{figure/code1.png}
+}
+
+\frame{
+  \frametitle{Bayes error: Homework revisited}
+  \blue{Double check the formula is correct using definition?}
+  \includegraphics[width = .8\textwidth]{figure/code2.png}
+}
+
+\frame{
+  \frametitle{Bayes error: Analytical solution (FYI)}
+  To get an analytical solution, we do not resolve to the computational trick of $p_1 / (p_1 + p_2)$ as before. Instead by using the original form, 
+  \pause
+  \[
+E_x(max_j Pr(Y = j | \mathbf{x})) = \int_{R^2} max\{\frac{0.5f_0(\mathbf{x})}{Pr(\mathbf{x})}, \frac{0.5f_1(\mathbf{x})}{Pr(\mathbf{x})} \} Pr(\mathbf{x})d\mathbf{x}
+\]
+\pause
+Notice the term $Pr(\mathbf{x})$ cancels out!
+\[
+E_x(max_j Pr(Y = j | \mathbf{x})) = \int_{R^2} max\{0.5f_0(\mathbf{x}), 0.5f_1(\mathbf{x})\}d\mathbf{x}
+\]
+\pause
+We can calculate the regions where  $f_0 < f_1$ and vice versa by observing 
+\[
+f_0(x) = f_1(x) \Longrightarrow x_1^2 + x_2^2 = (x_1 - 1.5)^2 + (x_2 - 1.5)^2
+\]
+}
+\frame{
+  \frametitle{Bayes error: Analytical solution (FYI)}
+  
+  \[
+  error = 1 - \Big(0.5\int_{x_2 < 1.5 - x_1} f_0 (\mathbf{x}) d\mathbf{x} + 0.5\int_{x_2 > 1.5 - x_1} f_1 (\mathbf{x}) d\mathbf{x}\Big)
+  \]
+  \begin{itemize}[<+->]
+      \item The integral can be calculated numerically, 
+  \end{itemize}
+}
+\frame{
+  \frametitle{Bayes error: Analytical solution (FYI)}
+    \begin{itemize}[<+->]
+      \item The integral can be calculated numerically, 
+
+      \item or we can simplify it a little further...
+
+        \begin{eqnarray} \ok
+          \int_{x_2 < 1.5 - x_1} f_0(\mathbf{x}) d\mathbf{x} &=& \int_{-\infty}^{\infty}\int_{-\infty}^{\frac{\sqrt{1.5 ^ 2 + 1.5 ^ 2}}{2}} f_0(\mathbf{x}) dx_1dx_2 
+          \\\ok
+          &=& \Phi(\frac{\sqrt{1.5 ^ 2 + 1.5 ^ 2}}{2})
+        \end{eqnarray}
+        \item Same for the other term.
+        \item $1 - 0.5 * (pnorm(\frac{\sqrt{1.5 ^ 2 + 1.5 ^ 2}}{2}) + pnorm(\frac{\sqrt{1.5 ^ 2 + 1.5 ^ 2}}{2}))$ 
+    \end{itemize}
+
+  }
+
+  \frame{
+  \frametitle{A not so great drawing}
+  \includegraphics[width =\textwidth]{figure/p1.png}
+  }
+
+  \frame{
+  \frametitle{A not so great drawing}
+  \includegraphics[width =\textwidth]{figure/p2.png}
+  }
+    \frame{
+  \frametitle{A not so great drawing}
+  \includegraphics[width =\textwidth]{figure/p3.png}
+  }
+% \frame{ 
+%   \frametitle{Side note: Other probability topics to be aware of}
+  
+%   It will be unlikely to see anything you haven't seen in lectures on the exams, but the following topics are in general good supplement to learning machine learning.
+
+%   \begin{itemize}[<+->]
+%     \item Cumulative distribution function
+%     \item Calculation of expectations and variances, e.g. $Var(\bar X)$
+%     \item Well-known distributions
+%           \begin{itemize}[<+->]
+%             \item Discrete: Bernoulli, Binomial, Geometric, Poisson, ...
+%             \item Continuous: Uniform, Exponential, Normal, Multivariate Normal, ...
+%           \end{itemize}
+%   \end{itemize}
+% }
+\frame{
+  \frametitle{Summary}
+  \begin{itemize}[<+->]
+    \item Bayes error calculation when
+          \begin{enumerate}
+            \item  $Pr(Y | X)$ is known
+            \item  $Pr(X | Y)$ is known
+          \end{enumerate}
+    \item In the later case, numerical approximation/simulation using  
+          \begin{enumerate}
+              \item definition of Bayes classifier
+              \item formula of Bayes error rate
+          \end{enumerate}      
+  
+  \end{itemize}
+}
+\frame{
+  \frametitle{Why we learn this}
+  \begin{itemize}[<+->]
+     \item Bayes error rate is great.
+     \item But it can only be calculated if you know the ground truth.
+     \item In practice, we do not have know $P(X|Y)$, $P(X)$, or even $P(Y)$.
+     \item One of the approaches in real-life classification:
+          \begin{itemize}[<+->]
+            \item Assume some generating distribution.
+            \item Estimate the distribution from data.
+            \item Making classifications using the `approximated' Bayes classifier.
+          \end{itemize}
+      \item In the Normal $P(X|Y)$ case, this is called LDA.
+   \end{itemize} 
+
+ }
+\frame{
+  \frametitle{Why we learn this}
+  \includegraphics[width = \textwidth]{figure/LDA.png}
+
+}
+
+{
+  % \usebackgroundtemplate{\includegraphics[height=\paperheight]{fun/dragon.jpg}}
+  \frame{
+  \frametitle{Takeaway}
+
+  \begin{quote}
+      ``The dragon has three heads: probability rules, calculus, and simulation.'' -- Rhaegar Targaryen, A Clash of Kings.
+    \end{quote}  
+
+    \pause
+
+    \includegraphics[width=0.9\textwidth]{fun/dragon.png}  
+
+}
+}
+\end{document}
